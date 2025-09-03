@@ -36,6 +36,11 @@ class User extends Authenticatable
         'password' => 'hashed',
     ];
 
+     public function getAuthIdentifierName()
+    {
+        return 'username';
+    }
+
     /**
      * Setter otomatis untuk password (langsung di-hash).
      */
