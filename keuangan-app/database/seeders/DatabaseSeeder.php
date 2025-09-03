@@ -3,7 +3,6 @@
 namespace Database\Seeders;
 
 use Illuminate\Database\Seeder;
-use Illuminate\Support\Facades\Hash;
 use App\Models\User;
 
 class DatabaseSeeder extends Seeder
@@ -16,14 +15,14 @@ class DatabaseSeeder extends Seeder
         // Admin default
         User::create([
             'username' => 'admin',
-            'password' => Hash::make('password'), // password: "password" 
+            'password' => 'password',
             'role' => 'admin',
         ]);
 
         // CEO default
         User::create([
             'username' => 'ceo',
-            'password' => Hash::make('password'), // password: "password" 
+            'password' => 'password',
             'role' => 'ceo',
         ]);
     }
