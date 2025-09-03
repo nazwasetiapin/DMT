@@ -10,6 +10,12 @@ return new class extends Migration
     {
         Schema::create('sub_categories', function (Blueprint $table) {
             $table->id();
+
+             // Relasi ke categories
+            $table->foreignId('category_id')
+                  ->constrained('categories')
+                  ->cascadeOnDelete();
+                  
             $table->string('name')->unique(); // contoh: "Sewa Layanan App", "Agency"
             $table->timestamps();
         });
