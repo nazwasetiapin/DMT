@@ -20,6 +20,22 @@
     </a>
   </li>
 
+  <!-- Nav Item - Transaksi -->
+<li class="nav-item">
+    <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseTransactions"
+        aria-expanded="false" aria-controls="collapseTransactions">
+        <i class="fas fa-exchange-alt"></i>
+        <span>Transactions</span>
+    </a>
+    <div id="collapseTransactions" class="collapse" aria-labelledby="headingTransactions" data-parent="#accordionSidebar">
+        <div class="bg-white py-2 collapse-inner rounded">
+            <a class="collapse-item" href="{{ url('/transactions') }}">Semua Data</a>
+            <a class="collapse-item" href="{{ url('/transactions/pemasukan') }}">Pemasukan</a>
+            <a class="collapse-item" href="{{ url('/transactions/pengeluaran') }}">Pengeluaran</a>
+        </div>
+    </div>
+</li>
+
   <!-- Divider -->
   <hr class="sidebar-divider">
 
@@ -33,33 +49,6 @@
     <a class="nav-link" href="{{ url('/') }}">
       <i class="fas fa-fw fa-home"></i>
       <span>Home</span>
-    </a>
-  </li>
-
-  <!-- Nav Item - About -->
-  <li class="nav-item">
-    <a class="nav-link" href="#">
-      <i class="fas fa-fw fa-info-circle"></i>
-      <span>About</span>
-    </a>
-  </li>
-
-  <!-- Nav Item - Contact -->
-  <li class="nav-item">
-    <a class="nav-link" href="#">
-      <i class="fas fa-fw fa-envelope"></i>
-      <span>Contact</span>
-    </a>
-  </li>
-
-  <!-- Divider -->
-  <hr class="sidebar-divider d-none d-md-block">
-
-  <!-- Nav Item - Settings -->
-  <li class="nav-item">
-    <a class="nav-link" href="#">
-      <i class="fas fa-fw fa-cog"></i>
-      <span>Settings</span>
     </a>
   </li>
 
