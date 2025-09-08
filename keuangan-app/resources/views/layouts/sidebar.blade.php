@@ -20,30 +20,45 @@
     </a>
   </li>
 
-  <!-- Nav Item - Transaksi -->
-  <li class="nav-item">
+
+<!-- Divider -->
+  <hr class="sidebar-divider">
+
+  <!-- Heading -->
+  <div class="sidebar-heading">
+    Transaksi
+  </div>
+
+  <!-- Transaksi Collapse Menu -->
+  <li class="nav-item {{ request()->is('transactions*') ? 'active' : '' }}">
     <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseTransactions"
-      aria-expanded="false" aria-controls="collapseTransactions">
+       aria-expanded="true" aria-controls="collapseTransactions">
       <i class="fas fa-exchange-alt"></i>
-      <span>Transactions</span>
+      <span>Transaksi</span>
     </a>
-    <div id="collapseTransactions" class="collapse" aria-labelledby="headingTransactions"
-      data-parent="#accordionSidebar">
+    <div id="collapseTransactions" class="collapse {{ request()->is('transactions*') ? 'show' : '' }}" aria-labelledby="headingTransactions" data-parent="#accordionSidebar">
       <div class="bg-white py-2 collapse-inner rounded">
-        <a class="collapse-item" href="{{ url('/transactions') }}">Semua Data</a>
-        <a class="collapse-item" href="{{ url('/transactions/pemasukan') }}">Pemasukan</a>
-        <a class="collapse-item" href="{{ url('/transactions/pengeluaran') }}">Pengeluaran</a>
+        <a class="collapse-item {{ request()->is('transactions/create') ? 'active' : '' }}" href="{{ route('transactions.create') }}">Input Transaksi</a>
+        <a class="collapse-item {{ request()->is('transactions') ? 'active' : '' }}" href="{{ route('transactions.index') }}">Data Transaksi</a>
       </div>
     </div>
   </li>
 
+  <!-- Divider -->
+  <hr class="sidebar-divider">
 
-  <!-- Nav Item - Tambah data -->
-  <li class="nav-item">
-    <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseAddData" aria-expanded="false"
-      aria-controls="collapseAddData">
-      <i class="fas fa-plus-circle"></i>
-      <span>Tambah Data</span>
+  <!-- Heading -->
+  <div class="sidebar-heading">
+    Master Data
+  </div>
+
+<!-- Nav Item - Tambah data -->
+<li class="nav-item">
+    <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseAddData"
+        aria-expanded="false" aria-controls="collapseAddData">
+        <i class="fas fa-database"></i>
+        <span>Master Data</span>
+
     </a>
     <div id="collapseAddData" class="collapse" aria-labelledby="headingAddData" data-parent="#accordionSidebar">
       <div class="bg-white py-2 collapse-inner rounded">
