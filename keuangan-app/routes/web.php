@@ -20,15 +20,18 @@ use App\Http\Controllers\TransactionController;
 |
 */
 
-// Home
 Route::get('/', function () {
-    return view('home');
-})->name('home');
+    return view('welcome');
+});
 
+Route::get('/home', function () {
+    return view('home');
+});
 // Semua Data Transaksi
 Route::get('/transactions', function () {
     return view('transactions.index'); // ini file index.blade.php utama
 })->name('transactions.index');
+
 
 Route::get('/dashboard', function () {
     return view('dashboard');
