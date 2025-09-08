@@ -4,9 +4,9 @@
 
 @section('content')
 <div class="d-flex justify-content-between align-items-center mb-3">
-    <h1 class="h3 mb-0 text-gray-800">Daftar Types</h1>
+    <h1 class="h3 mb-0 text-gray-800">Daftar Tipe</h1>
     <a href="{{ route('types.create') }}" class="btn btn-primary">
-        <i class="bi bi-plus-circle"></i> Tambah Type
+        <i class="bi bi-plus-circle"></i> Tambah Tipe
     </a>
 </div>
 
@@ -23,7 +23,7 @@
 
                     <tr>
                         <th>No</th>
-                        <th>Nama Type</th>
+                        <th>Nama Tipe</th>
                         
                         <th>Aksi</th>
                     </tr>
