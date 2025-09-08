@@ -1,7 +1,7 @@
 <!-- Sidebar -->
 <ul class="navbar-nav bg-gradient-primary sidebar sidebar-dark accordion" id="accordionSidebar">
 
- <!-- Brand -->
+  <!-- Brand -->
   <a class="sidebar-brand d-flex align-items-center justify-content-center" href="/">
     <div class="sidebar-brand-icon rotate-n-15">
       <i class="fas fa-coins"></i>
@@ -19,6 +19,7 @@
       <span>Dashboard</span>
     </a>
   </li>
+
 
 <!-- Divider -->
   <hr class="sidebar-divider">
@@ -57,16 +58,16 @@
         aria-expanded="false" aria-controls="collapseAddData">
         <i class="fas fa-database"></i>
         <span>Master Data</span>
+
     </a>
     <div id="collapseAddData" class="collapse" aria-labelledby="headingAddData" data-parent="#accordionSidebar">
-        <div class="bg-white py-2 collapse-inner rounded">
-            <a class="collapse-item" href="{{ url('/types') }}">Tipe</a>
-            <a class="collapse-item" href="{{ url('/categories') }}">Category</a>
-            <a class="collapse-item" href="{{ url('/sub-categories') }}">Sub Category</a>
-        </div>
+      <div class="bg-white py-2 collapse-inner rounded">
+        <a class="collapse-item" href="{{ url('/types') }}">Tipe</a>
+        <a class="collapse-item" href="{{ url('/categories') }}">Category</a>
+        <a class="collapse-item" href="{{ url('/sub-categories') }}">Sub Category</a>
+      </div>
     </div>
-</li>
-
+  </li>
 
   <!-- Divider -->
   <hr class="sidebar-divider">

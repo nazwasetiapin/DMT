@@ -1,12 +1,12 @@
 @extends('layouts.app')
 
-@section('title', 'Daftar Types')
+@section('title', 'Daftar Sub Categories')
 
 @section('content')
 <div class="d-flex justify-content-between align-items-center mb-3">
-    <h1 class="h3 mb-0 text-gray-800">Daftar Tipe</h1>
-    <a href="{{ route('types.create') }}" class="btn btn-primary">
-        <i class="bi bi-plus-circle"></i> Tambah Tipe
+    <h1 class="h3 mb-0 text-gray-800">Daftar Sub Categories</h1>
+    <a href="{{ route('sub-categories.create') }}" class="btn btn-primary">
+        <i class="bi bi-plus-circle"></i> Tambah Sub Category
     </a>
 </div>
 
@@ -14,33 +14,32 @@
     <div class="alert alert-success">{{ session('success') }}</div>
 @endif
 
-@if ($types->isEmpty())
-    <div class="alert alert-info">Belum ada data type.</div>
+@if ($subCategories->isEmpty())
+    <div class="alert alert-info">Belum ada data sub category.</div>
 @else
     <div class="card shadow">
         <div class="card-body">
-               <table class="table table-bordered table-hover" id="dataTable" width="100%" cellspacing="0">
+            <table class="table table-bordered table-hover">
                 <thead class="thead-light">
                     <tr>
                         <th>No</th>
-                        <th>Nama Tipe</th>
+                        <th>Nama Sub Category</th>
                         <th>Aksi</th>
                     </tr>
                 </thead>
                 <tbody>
-                    @foreach ($types as $index => $type)
+                    @foreach ($subCategories as $index => $subCategory)
                         <tr>
                             <td>{{ $index + 1 }}</td>
-                            <td>{{ $type->name }}</td>
-                          
+                            <td>{{ $subCategory->name }}</td>
                             <td>
-                                <a href="{{ route('types.edit', $type->id) }}" class="btn btn-sm btn-warning">
-                                    <i class="bi bi-pencil-square"></i> 
+                                <a href="{{ route('sub-categories.edit', $subCategory->id) }}" class="btn btn-sm btn-warning">
+                                    <i class="bi bi-pencil-square"></i>
                                 </a>
-                                <form id="delete-form-{{ $type->id }}" action="{{ route('types.destroy', $type->id) }}" method="POST" class="d-inline">
+                                <form id="delete-form-{{ $subCategory->id }}" action="{{ route('sub-categories.destroy', $subCategory->id) }}" method="POST" class="d-inline">
                                     @csrf
                                     @method('DELETE')
-                                    <button type="button" onclick="confirmDelete({{ $type->id }})" class="btn btn-sm btn-danger">
+                                    <button type="button" onclick="confirmDelete({{ $subCategory->id }})" class="btn btn-sm btn-danger">
                                         <i class="bi bi-trash"></i> 
                                     </button>
                                 </form>
