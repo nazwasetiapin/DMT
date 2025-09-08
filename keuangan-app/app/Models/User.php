@@ -2,27 +2,31 @@
 
 namespace App\Models;
 
+// use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
-use Illuminate\Support\Facades\Hash;
 
 class User extends Authenticatable
 {
     use HasApiTokens, HasFactory, Notifiable;
 
     /**
-     * Kolom yang bisa diisi (fillable).
+     * The attributes that are mass assignable.
+     *
+     * @var array<int, string>
      */
     protected $fillable = [
-        'username',
+        'name',
+        'email',
         'password',
-        'role', // admin atau ceo
     ];
 
     /**
-     * Kolom yang disembunyikan saat serialisasi.
+     * The attributes that should be hidden for serialization.
+     *
+     * @var array<int, string>
      */
     protected $hidden = [
         'password',
@@ -30,37 +34,12 @@ class User extends Authenticatable
     ];
 
     /**
-     * Casting kolom.
+     * The attributes that should be cast.
+     *
+     * @var array<string, string>
      */
     protected $casts = [
+        'email_verified_at' => 'datetime',
         'password' => 'hashed',
     ];
-
-     public function getAuthIdentifierName()
-    {
-        return 'username';
-    }
-
-    /**
-     * Setter otomatis untuk password (langsung di-hash).
-     */
-    public function setPasswordAttribute($value)
-    {
-        if (!empty($value)) {
-            $this->attributes['password'] = Hash::make($value);
-        }
-    }
-
-    /**
-     * Cek role user.
-     */
-    public function isAdmin()
-    {
-        return $this->role === 'admin';
-    }
-
-    public function isCeo()
-    {
-        return $this->role === 'ceo';
-    }
 }
