@@ -9,14 +9,17 @@ class SubCategory extends Model
 {
     use HasFactory;
 
-    protected $table = 'sub_categories'; // nama tabel
-    protected $guarded = ['id'];         // proteksi kolom id
+    protected $fillable = ['category_id', 'name'];
 
-    /**
-     * Relasi ke transactions
-     */
+    // Relasi: sub kategori milik kategori
+    public function category()
+    {
+        return $this->belongsTo(Category::class);
+    }
+
+    // Relasi: 1 sub kategori punya banyak transaksi
     public function transactions()
     {
-        return $this->hasMany(Transaction::class, 'sub_category_id');
+        return $this->hasMany(Transaction::class);
     }
 }
