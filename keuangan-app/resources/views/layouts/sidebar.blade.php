@@ -1,12 +1,12 @@
 <!-- Sidebar -->
 <ul class="navbar-nav bg-gradient-primary sidebar sidebar-dark accordion" id="accordionSidebar">
 
-  <!-- Brand -->
-  <a class="sidebar-brand d-flex align-items-center justify-content-center" href="{{ url('/dashboard') }}">
+ <!-- Brand -->
+  <a class="sidebar-brand d-flex align-items-center justify-content-center" href="/">
     <div class="sidebar-brand-icon rotate-n-15">
-      <i class="fas fa-laugh-wink"></i>
+      <i class="fas fa-coins"></i>
     </div>
-    <div class="sidebar-brand-text mx-3">My App</div>
+    <div class="sidebar-brand-text mx-3">Keuangan Perusahaan</div>
   </a>
 
   <!-- Divider -->
@@ -20,7 +20,7 @@
     </a>
   </li>
 
-  <!-- Nav Item - Transaksi -->
+<!-- Nav Item - Transaksi -->
 <li class="nav-item">
     <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseTransactions"
         aria-expanded="false" aria-controls="collapseTransactions">
@@ -35,6 +35,23 @@
         </div>
     </div>
 </li>
+
+<!-- Nav Item - Tambah data -->
+<li class="nav-item">
+    <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseAddData"
+        aria-expanded="false" aria-controls="collapseAddData">
+        <i class="fas fa-plus-circle"></i>
+        <span>Tambah Data</span>
+    </a>
+    <div id="collapseAddData" class="collapse" aria-labelledby="headingAddData" data-parent="#accordionSidebar">
+        <div class="bg-white py-2 collapse-inner rounded">
+            <a class="collapse-item" href="{{ url('/types') }}">Tipe</a>
+            <a class="collapse-item" href="{{ url('/categories') }}">Category</a>
+            <a class="collapse-item" href="{{ url('/sub-categories') }}">Sub Category</a>
+        </div>
+    </div>
+</li>
+
 
   <!-- Divider -->
   <hr class="sidebar-divider">
