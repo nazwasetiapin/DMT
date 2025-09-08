@@ -1,7 +1,7 @@
 <!-- Sidebar -->
 <ul class="navbar-nav bg-gradient-primary sidebar sidebar-dark accordion" id="accordionSidebar">
 
- <!-- Brand -->
+  <!-- Brand -->
   <a class="sidebar-brand d-flex align-items-center justify-content-center" href="/">
     <div class="sidebar-brand-icon rotate-n-15">
       <i class="fas fa-coins"></i>
@@ -20,38 +20,39 @@
     </a>
   </li>
 
-<!-- Nav Item - Transaksi -->
-<li class="nav-item">
+  <!-- Nav Item - Transaksi -->
+  <li class="nav-item">
     <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseTransactions"
-        aria-expanded="false" aria-controls="collapseTransactions">
-        <i class="fas fa-exchange-alt"></i>
-        <span>Transactions</span>
+      aria-expanded="false" aria-controls="collapseTransactions">
+      <i class="fas fa-exchange-alt"></i>
+      <span>Transactions</span>
     </a>
-    <div id="collapseTransactions" class="collapse" aria-labelledby="headingTransactions" data-parent="#accordionSidebar">
-        <div class="bg-white py-2 collapse-inner rounded">
-            <a class="collapse-item" href="{{ url('/transactions') }}">Semua Data</a>
-            <a class="collapse-item" href="{{ url('/transactions/pemasukan') }}">Pemasukan</a>
-            <a class="collapse-item" href="{{ url('/transactions/pengeluaran') }}">Pengeluaran</a>
-        </div>
+    <div id="collapseTransactions" class="collapse" aria-labelledby="headingTransactions"
+      data-parent="#accordionSidebar">
+      <div class="bg-white py-2 collapse-inner rounded">
+        <a class="collapse-item" href="{{ url('/transactions') }}">Semua Data</a>
+        <a class="collapse-item" href="{{ url('/transactions/pemasukan') }}">Pemasukan</a>
+        <a class="collapse-item" href="{{ url('/transactions/pengeluaran') }}">Pengeluaran</a>
+      </div>
     </div>
-</li>
+  </li>
 
-<!-- Nav Item - Tambah data -->
-<li class="nav-item">
-    <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseAddData"
-        aria-expanded="false" aria-controls="collapseAddData">
-        <i class="fas fa-plus-circle"></i>
-        <span>Tambah Data</span>
+
+  <!-- Nav Item - Tambah data -->
+  <li class="nav-item">
+    <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseAddData" aria-expanded="false"
+      aria-controls="collapseAddData">
+      <i class="fas fa-plus-circle"></i>
+      <span>Tambah Data</span>
     </a>
     <div id="collapseAddData" class="collapse" aria-labelledby="headingAddData" data-parent="#accordionSidebar">
-        <div class="bg-white py-2 collapse-inner rounded">
-            <a class="collapse-item" href="{{ url('/types') }}">Tipe</a>
-            <a class="collapse-item" href="{{ url('/categories') }}">Category</a>
-            <a class="collapse-item" href="{{ url('/sub-categories') }}">Sub Category</a>
-        </div>
+      <div class="bg-white py-2 collapse-inner rounded">
+        <a class="collapse-item" href="{{ url('/types') }}">Tipe</a>
+        <a class="collapse-item" href="{{ url('/categories') }}">Category</a>
+        <a class="collapse-item" href="{{ url('/sub-categories') }}">Sub Category</a>
+      </div>
     </div>
-</li>
-
+  </li>
 
   <!-- Divider -->
   <hr class="sidebar-divider">
