@@ -21,10 +21,25 @@
 
     <div class="mb-3">
         <label for="name">Nama Sub Category</label>
-        <input type="text" name="name" id="name" class="form-control" value="{{ old('name', $subCategory->name) }}" required>
+        <input type="text" name="name" id="name" 
+               class="form-control" 
+               value="{{ old('name', $subCategory->name) }}" required>
     </div>
 
-    <button type="submit" class="btn btn-success">Update</button>
+    <div class="mb-3">
+        <label for="category_id">Pilih Category</label>
+        <select name="category_id" id="category_id" class="form-control" required>
+            <option value="">-- Pilih Category --</option>
+            @foreach($categories as $category)
+                <option value="{{ $category->id }}" 
+                    {{ $subCategory->category_id == $category->id ? 'selected' : '' }}>
+                    {{ $category->name }}
+                </option>
+            @endforeach
+        </select>
+    </div>
+
+    <button type="submit" class="btn btn-primary">Update</button>
     <a href="{{ route('sub-categories.index') }}" class="btn btn-secondary">Kembali</a>
 </form>
 @endsection
