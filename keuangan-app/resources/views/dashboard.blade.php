@@ -14,7 +14,7 @@
     <!-- Content Row -->
     <div class="row">
 
-        <!-- Earnings (Monthly) Card Example -->
+        <!-- Pemasukan -->
         <div class="col-xl-3 col-md-6 mb-4">
             <div class="card border-left-primary shadow h-100 py-2">
                 <div class="card-body">
@@ -23,53 +23,50 @@
                             <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">
                                 Pemasukan
                             </div>
-                            <div class="h5 mb-0 font-weight-bold text-gray-800">$40,000</div>
+                            <div class="h5 mb-0 font-weight-bold text-gray-800">
+                                Rp {{ number_format($totalPemasukan, 0, ',', '.') }}
+                            </div>
                         </div>
                         <div class="col-auto">
-                            <i class="fas fa-calendar fa-2x text-gray-300"></i>
+                            <i class="fas fa-arrow-circle-down fa-2x text-gray-300"></i>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
 
-        <!-- Earnings (Annual) Card Example -->
+        <!-- Pengeluaran -->
         <div class="col-xl-3 col-md-6 mb-4">
-            <div class="card border-left-success shadow h-100 py-2">
+            <div class="card border-left-danger shadow h-100 py-2">
                 <div class="card-body">
                     <div class="row no-gutters align-items-center">
                         <div class="col mr-2">
-                            <div class="text-xs font-weight-bold text-success text-uppercase mb-1">
+                            <div class="text-xs font-weight-bold text-danger text-uppercase mb-1">
                                 Pengeluaran
                             </div>
-                            <div class="h5 mb-0 font-weight-bold text-gray-800">$215,000</div>
+                            <div class="h5 mb-0 font-weight-bold text-gray-800">
+                                Rp {{ number_format($totalPengeluaran, 0, ',', '.') }}
+                            </div>
                         </div>
                         <div class="col-auto">
-                            <i class="fas fa-dollar-sign fa-2x text-gray-300"></i>
+                            <i class="fas fa-arrow-circle-up fa-2x text-gray-300"></i>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
 
-        <!-- Tasks Card Example -->
+        <!-- Total Transaksi -->
         <div class="col-xl-3 col-md-6 mb-4">
             <div class="card border-left-info shadow h-100 py-2">
                 <div class="card-body">
                     <div class="row no-gutters align-items-center">
                         <div class="col mr-2">
-                            <div class="text-xs font-weight-bold text-info text-uppercase mb-1">Tasks</div>
-                            <div class="row no-gutters align-items-center">
-                                <div class="col-auto">
-                                    <div class="h5 mb-0 mr-3 font-weight-bold text-gray-800">50%</div>
-                                </div>
-                                <div class="col">
-                                    <div class="progress progress-sm mr-2">
-                                        <div class="progress-bar bg-info" role="progressbar"
-                                             style="width: 50%" aria-valuenow="50" aria-valuemin="0"
-                                             aria-valuemax="100"></div>
-                                    </div>
-                                </div>
+                            <div class="text-xs font-weight-bold text-info text-uppercase mb-1">
+                                Total Transaksi
+                            </div>
+                            <div class="h5 mb-0 font-weight-bold text-gray-800">
+                                {{ $totalTransaksi }}
                             </div>
                         </div>
                         <div class="col-auto">
@@ -80,40 +77,55 @@
             </div>
         </div>
 
-        <!-- Pending Requests Card Example -->
+        <!-- Saldo Akhir -->
         <div class="col-xl-3 col-md-6 mb-4">
             <div class="card border-left-warning shadow h-100 py-2">
                 <div class="card-body">
                     <div class="row no-gutters align-items-center">
                         <div class="col mr-2">
                             <div class="text-xs font-weight-bold text-warning text-uppercase mb-1">
-                                Pending Requests
+                                Saldo
                             </div>
-                            <div class="h5 mb-0 font-weight-bold text-gray-800">18</div>
+                            <div class="h5 mb-0 font-weight-bold text-gray-800">
+                                Rp {{ number_format($saldoAkhir, 0, ',', '.') }}
+                            </div>
                         </div>
                         <div class="col-auto">
-                            <i class="fas fa-comments fa-2x text-gray-300"></i>
+                            <i class="fas fa-wallet fa-2x text-gray-300"></i>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
+
     </div>
 
     <!-- Content Row -->
+    <!-- Content Row -->
     <div class="row">
+        <!-- Grafik Bar -->
         <div class="col-lg-6 mb-4">
-            <!-- Example Chart -->
             <div class="card shadow mb-4">
                 <div class="card-header py-3">
-                    <h6 class="m-0 font-weight-bold text-primary">Example Chart</h6>
+                    <h6 class="m-0 font-weight-bold text-primary">Grafik Transaksi</h6>
                 </div>
                 <div class="card-body">
                     <canvas id="myChart"></canvas>
                 </div>
             </div>
         </div>
+<div class="col-lg-6 mb-4">
+    <div class="card shadow mb-4">
+        <div class="card-header py-3">
+            <h6 class="m-0 font-weight-bold text-success">Perbandingan Pemasukan & Pengeluaran</h6>
+        </div>
+        <div class="card-body">
+            <canvas id="barChart"></canvas>
+        </div>
     </div>
+</div>
+
+
 @endsection
 
 @push('scripts')
@@ -123,12 +135,12 @@
         new Chart(ctx, {
             type: 'bar',
             data: {
-                labels: ['Red', 'Blue', 'Yellow', 'Green', 'Purple', 'Orange'],
+                labels: ['Pemasukan', 'Pengeluaran', 'Saldo Akhir'],
                 datasets: [{
-                    label: '# of Votes',
-                    data: [12, 19, 3, 5, 2, 3],
+                    label: 'Jumlah (Rp)',
+                    data: [{{ $totalPemasukan }}, {{ $totalPengeluaran }}, {{ $saldoAkhir }}],
                     borderWidth: 1,
-                    backgroundColor: ['#f87171', '#60a5fa', '#facc15', '#34d399', '#a78bfa', '#fb923c'],
+                    backgroundColor: ['#4e73df', '#e74a3b', '#f6c23e'],
                 }]
             },
             options: {
@@ -137,5 +149,26 @@
                 }
             }
         });
+
+        const ctxBar = document.getElementById('barChart');
+new Chart(ctxBar, {
+    type: 'bar',
+    data: {
+        labels: ['Pemasukan', 'Pengeluaran'],
+        datasets: [{
+            label: 'Jumlah (Rp)',
+            data: [{{ $totalPemasukan }}, {{ $totalPengeluaran }}],
+            backgroundColor: ['#1cc88a', '#e74a3b'],
+        }]
+    },
+    options: {
+        indexAxis: 'y', // bikin horizontal
+        scales: {
+            x: { beginAtZero: true }
+        }
+    }
+});
+
+
     </script>
 @endpush

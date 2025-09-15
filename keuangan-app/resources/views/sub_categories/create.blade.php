@@ -22,6 +22,18 @@
         <input type="text" name="name" id="name" class="form-control" value="{{ old('name') }}" required>
     </div>
 
+    <div class="mb-3">
+        <label for="category_id">Category</label>
+        <select name="category_id" id="category_id" class="form-control" required>
+            <option value="">-- Pilih Kategori --</option>
+            @foreach($categories as $category)
+                <option value="{{ $category->id }}" {{ old('category_id') == $category->id ? 'selected' : '' }}>
+                    {{ $category->name }}
+                </option>
+            @endforeach
+        </select>
+    </div>
+
     <button type="submit" class="btn btn-primary">Simpan</button>
     <a href="{{ route('sub-categories.index') }}" class="btn btn-secondary">Kembali</a>
 </form>
