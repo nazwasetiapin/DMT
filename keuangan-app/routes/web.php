@@ -2,23 +2,15 @@
 
 use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\TypeController;
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\SubCategoryController;
 use App\Http\Controllers\TransactionController;
 
-
-
-/*
-|--------------------------------------------------------------------------
-| Web Routes
-|--------------------------------------------------------------------------
-|
-| Here is where you can register web routes for your application. These
-| routes are loaded by the RouteServiceProvider and all of them will
-| be assigned to the "web" middleware group. Make something great!
-|
-*/
+Route::get('/dashboard', [DashboardController::class, 'index'])
+    ->middleware(['auth', 'verified'])
+    ->name('dashboard');
 
 Route::get('/', function () {
     return view('welcome');
@@ -27,45 +19,29 @@ Route::get('/', function () {
 Route::get('/home', function () {
     return view('home');
 });
-// Semua Data Transaksi
-Route::get('/transactions', function () {
-    return view('transactions.index'); // ini file index.blade.php utama
-})->name('transactions.index');
 
+///Admin + CEO bisa lihat dashboard
+Route::middleware(['auth', 'role:admin|ceo'])->group(function () {
+    Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
+});
 
-Route::get('/dashboard', function () {
-    return view('dashboard');
-})->middleware(['auth', 'verified'])->name('dashboard');
+// Hanya Admin yang bisa input/edit transaksi
+Route::middleware(['auth', 'role:admin'])->group(function () {
+    Route::resource('transactions', TransactionController::class);
+});
 
 // Transactions - Pemasukan
-Route::prefix('transactions/pemasukan')->group(function () {
-    Route::get('/', function () {
-        return view('transactions.pemasukan.index');
-    })->name('pemasukan.index');
-
-    Route::get('/create', function () {
-        return view('transactions.pemasukan.create');
-    })->name('pemasukan.create');
-
-    Route::get('/{id}/edit', function ($id) {
-        return view('transactions.pemasukan.edit', compact('id'));
-    })->name('pemasukan.edit');
-    
+Route::prefix('transactions/pemasukan')->middleware('auth')->group(function () {
+    Route::get('/', [TransactionController::class, 'pemasukan'])->name('pemasukan.index');
+    Route::get('/create', [TransactionController::class, 'createPemasukan'])->name('pemasukan.create');
+    Route::get('/{id}/edit', [TransactionController::class, 'editPemasukan'])->name('pemasukan.edit');
 });
 
 // Transactions - Pengeluaran
-Route::prefix('transactions/pengeluaran')->group(function () {
-    Route::get('/', function () {
-        return view('transactions.pengeluaran.index');
-    })->name('pengeluaran.index');
-
-    Route::get('/create', function () {
-        return view('transactions.pengeluaran.create');
-    })->name('pengeluaran.create');
-
-    Route::get('/{id}/edit', function ($id) {
-        return view('transactions.pengeluaran.edit', compact('id'));
-    })->name('pengeluaran.edit');
+Route::prefix('transactions/pengeluaran')->middleware('auth')->group(function () {
+    Route::get('/', [TransactionController::class, 'pengeluaran'])->name('pengeluaran.index');
+    Route::get('/create', [TransactionController::class, 'createPengeluaran'])->name('pengeluaran.create');
+    Route::get('/{id}/edit', [TransactionController::class, 'editPengeluaran'])->name('pengeluaran.edit');
 });
 
 Route::middleware('auth')->group(function () {
@@ -74,12 +50,16 @@ Route::middleware('auth')->group(function () {
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 });
 
+// Resource utama
 Route::middleware(['auth'])->group(function () {
     Route::resource('types', TypeController::class);
     Route::resource('categories', CategoryController::class);
     Route::resource('sub-categories', SubCategoryController::class);
     Route::resource('transactions', TransactionController::class);
-    
 });
+
+Route::get('/get-subcategories/{category_id}', [SubCategoryController::class, 'getByCategory'])
+    ->middleware('auth')
+    ->name('subcategories.byCategory');
 
 require __DIR__.'/auth.php';
