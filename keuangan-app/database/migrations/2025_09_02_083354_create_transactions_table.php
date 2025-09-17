@@ -30,6 +30,9 @@ return new class extends Migration
             // jumlah uang (Rp) dengan 2 angka desimal
             $table->decimal('amount', 15, 2);
 
+            // menentukan waktu
+            $table->date('tanggal');
+
             // deskripsi opsional
             $table->text('deskripsi')->nullable();
 

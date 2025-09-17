@@ -30,6 +30,7 @@
               <th>Category</th>
               <th>Sub Category</th>
               <th>Nominal</th>
+              <th>Tanggal</th>
               <th>Deskripsi</th>
               @if($role === 'admin')
                 <th>Action</th>
@@ -44,6 +45,7 @@
                 <td>{{ $trx->category->name ?? '-' }}</td>
                 <td>{{ $trx->subCategory->name ?? '-' }}</td>
                 <td>Rp {{ number_format($trx->amount, 0, ',', '.') }}</td>
+                <td>{{ $trx->tanggal->format('d-m-Y') }}</td>
                 <td>{{ $trx->deskripsi }}</td>
 
                 @if($role === 'admin')
