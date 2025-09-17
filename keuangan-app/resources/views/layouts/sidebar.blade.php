@@ -21,45 +21,62 @@
 
   <hr class="sidebar-divider">
 
-  @if(auth()->user()->role === 'admin')
-  <!-- Heading Transaksi -->
-  <div class="sidebar-heading">Transaksi</div>
+  {{-- ================= ADMIN MENU ================= --}}
+  @if(auth()->user()->role === 'admin' || auth()->user()->role == 1)
+    <!-- Heading Transaksi -->
+    <div class="sidebar-heading">Transaksi</div>
 
-  <!-- Transaksi Collapse Menu -->
-  <li class="nav-item {{ request()->is('transactions*') ? 'active' : '' }}">
-    <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseTransactions"
-       aria-expanded="true" aria-controls="collapseTransactions">
-      <i class="fas fa-exchange-alt"></i>
-      <span>Transaksi</span>
-    </a>
-    <div id="collapseTransactions" class="collapse {{ request()->is('transactions*') ? 'show' : '' }}" aria-labelledby="headingTransactions" data-parent="#accordionSidebar">
-      <div class="bg-white py-2 collapse-inner rounded">
-        <a class="collapse-item {{ request()->is('transactions/create') ? 'active' : '' }}" href="{{ route('transactions.create') }}">Input Transaksi</a>
-        <a class="collapse-item {{ request()->is('transactions') ? 'active' : '' }}" href="{{ route('transactions.index') }}">Data Transaksi</a>
+    <!-- Transaksi Collapse Menu -->
+    <li class="nav-item {{ request()->is('transactions*') ? 'active' : '' }}">
+      <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseTransactionsAdmin"
+        aria-expanded="true" aria-controls="collapseTransactionsAdmin">
+        <i class="fas fa-exchange-alt"></i>
+        <span>Transaksi</span>
+      </a>
+      <div id="collapseTransactionsAdmin" class="collapse {{ request()->is('transactions*') ? 'show' : '' }}" aria-labelledby="headingTransactions" data-parent="#accordionSidebar">
+        <div class="bg-white py-2 collapse-inner rounded">
+          <a class="collapse-item {{ request()->is('transactions/create') ? 'active' : '' }}" href="{{ route('transactions.create') }}">Input Transaksi</a>
+          <a class="collapse-item {{ request()->is('transactions') ? 'active' : '' }}" href="{{ route('transactions.index') }}">Data Transaksi</a>
+        </div>
       </div>
-    </div>
-  </li>
+    </li>
 
-  <hr class="sidebar-divider">
+    <hr class="sidebar-divider">
 
-  <!-- Master Data -->
-  <div class="sidebar-heading">Master Data</div>
+    <!-- Master Data -->
+    <div class="sidebar-heading">Master Data</div>
 
-  <li class="nav-item">
-    <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseAddData"
-        aria-expanded="false" aria-controls="collapseAddData">
-        <i class="fas fa-database"></i>
-        <span>Master Data</span>
-    </a>
-    <div id="collapseAddData" class="collapse" aria-labelledby="headingAddData" data-parent="#accordionSidebar">
-      <div class="bg-white py-2 collapse-inner rounded">
-        <a class="collapse-item" href="{{ url('/types') }}">Tipe</a>
-        <a class="collapse-item" href="{{ url('/categories') }}">Category</a>
-        <a class="collapse-item" href="{{ url('/sub-categories') }}">Sub Category</a>
+    <li class="nav-item">
+      <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseAddData"
+          aria-expanded="false" aria-controls="collapseAddData">
+          <i class="fas fa-database"></i>
+          <span>Master Data</span>
+      </a>
+      <div id="collapseAddData" class="collapse" aria-labelledby="headingAddData" data-parent="#accordionSidebar">
+        <div class="bg-white py-2 collapse-inner rounded">
+          <a class="collapse-item" href="{{ url('/types') }}">Tipe</a>
+          <a class="collapse-item" href="{{ url('/categories') }}">Category</a>
+          <a class="collapse-item" href="{{ url('/sub-categories') }}">Sub Category</a>
+        </div>
       </div>
-    </div>
-  </li>
-  <hr class="sidebar-divider">
+    </li>
+    <hr class="sidebar-divider">
+  @endif
+
+  {{-- ================= CEO MENU ================= --}}
+  @if(auth()->user()->role === 'ceo' || auth()->user()->role == 2)
+    <!-- Heading Transaksi -->
+    <div class="sidebar-heading">Transaksi</div>
+
+    <!-- Transaksi untuk CEO (hanya Data Transaksi) -->
+    <li class="nav-item {{ request()->is('transactions') ? 'active' : '' }}">
+      <a class="nav-link" href="{{ route('transactions.index') }}">
+        <i class="fas fa-exchange-alt"></i>
+        <span>Data Transaksi</span>
+      </a>
+    </li>
+
+    <hr class="sidebar-divider">
   @endif
 
   <!-- Menu Utama -->
@@ -70,7 +87,7 @@
       <span>Home</span>
     </a>
   </li>
-
+  
   <hr class="sidebar-divider d-none d-md-block">
 
   <!-- Sidebar Toggler -->

@@ -10,11 +10,27 @@ use Illuminate\Http\Request;
 
 class TransactionController extends Controller
 {
-    public function index()
-    {
-        $transactions = Transaction::with(['type', 'category', 'subCategory'])->get();
-        return view('transactions.index', compact('transactions'));
-    }
+     public function index()
+{
+    $transactions = Transaction::with(['type', 'category', 'subCategory'])->latest()->get();
+
+    // Hitung total pemasukan & pengeluaran
+    $pemasukanId   = Type::where('name', 'Pemasukan')->value('id');
+    $pengeluaranId = Type::where('name', 'Pengeluaran')->value('id');
+
+    $totalPemasukan   = $pemasukanId ? Transaction::where('type_id', $pemasukanId)->sum('amount') : 0;
+    $totalPengeluaran = $pengeluaranId ? Transaction::where('type_id', $pengeluaranId)->sum('amount') : 0;
+
+    $role = auth()->user()->role; 
+    
+    return view('transactions.index', compact(
+        'transactions',
+        'totalPemasukan',
+        'totalPengeluaran',
+        'role'
+    ));
+}
+
 
     public function create()
     {
