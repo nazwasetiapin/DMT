@@ -10,16 +10,40 @@ use Illuminate\Http\Request;
 
 class TransactionController extends Controller
 {
-     public function index()
+ public function index()
 {
-    $transactions = Transaction::with(['type', 'category', 'subCategory'])->latest()->get();
+    $query = Transaction::with(['type', 'category', 'subCategory'])->latest();
 
-    // Hitung total pemasukan & pengeluaran
+    // Tambahkan filter jika ada input bulan & tahun
+    if (request()->filled('month')) {
+        $query->whereMonth('tanggal', request('month'));
+    }
+
+    if (request()->filled('year')) {
+        $query->whereYear('tanggal', request('year'));
+    }
+
+    $transactions = $query->get();
+
+    // Hitung total pemasukan & pengeluaran (berdasarkan filter juga)
     $pemasukanId   = Type::where('name', 'Pemasukan')->value('id');
     $pengeluaranId = Type::where('name', 'Pengeluaran')->value('id');
 
-    $totalPemasukan   = $pemasukanId ? Transaction::where('type_id', $pemasukanId)->sum('amount') : 0;
-    $totalPengeluaran = $pengeluaranId ? Transaction::where('type_id', $pengeluaranId)->sum('amount') : 0;
+    $totalPemasukan   = $pemasukanId ? $query->clone()->where('type_id', $pemasukanId)->sum('amount') : 0;
+    $totalPengeluaran = $pengeluaranId ? $query->clone()->where('type_id', $pengeluaranId)->sum('amount') : 0;
+
+    // Ambil daftar tahun untuk dropdown filter
+    $years = Transaction::selectRaw('YEAR(tanggal) as year')
+        ->groupBy('year')
+        ->orderBy('year', 'desc')
+        ->pluck('year');
+
+    // Ringkasan per bulan & tahun (tidak dipengaruhi filter)
+    $monthlySums = Transaction::selectRaw('YEAR(tanggal) as year, MONTH(tanggal) as month, SUM(amount) as total')
+        ->groupBy('year', 'month')
+        ->orderBy('year', 'desc')
+        ->orderBy('month', 'desc')
+        ->get();
 
     $role = auth()->user()->role; 
     
@@ -27,9 +51,12 @@ class TransactionController extends Controller
         'transactions',
         'totalPemasukan',
         'totalPengeluaran',
-        'role'
+        'role',
+        'monthlySums',
+        'years'
     ));
 }
+
 
 
     public function create()
