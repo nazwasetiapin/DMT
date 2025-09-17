@@ -18,9 +18,6 @@ Route::get('/', function () {
     return view('welcome');
 });
 
-Route::get('/home', function () {
-    return view('home');
-});
 
 ///Admin + CEO bisa lihat dashboard
 Route::middleware(['auth', 'role:admin|ceo'])->group(function () {
