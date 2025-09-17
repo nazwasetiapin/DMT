@@ -23,6 +23,7 @@
               <th>Category</th>
               <th>Sub Category</th>
               <th>Nominal</th>
+              <th>Tanggal</th>
               <th>Deskripsi</th>
               <th>Action</th>
             </tr>
@@ -35,6 +36,7 @@
                 <td>{{ $trx->category->name ?? '-' }}</td>
                 <td>{{ $trx->subCategory->name ?? '-' }}</td>
                 <td>Rp {{ number_format($trx->amount, 0, ',', '.') }}</td>
+                <td>{{ $trx->tanggal->format('d-m-Y') }}</td>
                 <td>{{ $trx->deskripsi }}</td>
                 <td>
                   <a href="{{ route('transactions.edit', $trx->id) }}" class="btn btn-sm btn-warning">

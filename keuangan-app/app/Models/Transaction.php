@@ -14,7 +14,12 @@ class Transaction extends Model
         'category_id',
         'sub_category_id',
         'amount',
+        'tanggal',
         'deskripsi'
+    ];
+
+     protected $casts = [
+        'tanggal' => 'date', // otomatis jadi Carbon instance
     ];
 
     // Relasi ke Type

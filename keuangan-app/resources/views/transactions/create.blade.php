@@ -42,6 +42,12 @@
         </div>
 
         <div class="form-group">
+          <label for="tanggal">Tanggal</label>
+          <input type="date" name="tanggal" id="tanggal" class="form-control"
+            value="{{ old('tanggal', isset($trx) ? $trx->tanggal->format('Y-m-d') : '') }}" required>
+        </div>
+
+        <div class="form-group">
           <label>Deskripsi</label>
           <textarea name="deskripsi" class="form-control"></textarea>
         </div>
@@ -54,26 +60,26 @@
 @endsection
 
 @push('scripts')
-<script>
+  <script>
     document.getElementById('category_id').addEventListener('change', function () {
-        let categoryId = this.value;
-        let subCategorySelect = document.getElementById('sub_category_id');
+      let categoryId = this.value;
+      let subCategorySelect = document.getElementById('sub_category_id');
 
-        // reset pilihan
-        subCategorySelect.innerHTML = '<option value="">-- Pilih Sub Kategori --</option>';
+      // reset pilihan
+      subCategorySelect.innerHTML = '<option value="">-- Pilih Sub Kategori --</option>';
 
-        if (categoryId) {
-            fetch(`/get-subcategories/${categoryId}`)
-                .then(response => response.json())
-                .then(data => {
-                    data.forEach(sub => {
-                        let option = document.createElement('option');
-                        option.value = sub.id;
-                        option.textContent = sub.name;
-                        subCategorySelect.appendChild(option);
-                    });
-                });
-        }
+      if (categoryId) {
+        fetch(`/get-subcategories/${categoryId}`)
+          .then(response => response.json())
+          .then(data => {
+            data.forEach(sub => {
+              let option = document.createElement('option');
+              option.value = sub.id;
+              option.textContent = sub.name;
+              subCategorySelect.appendChild(option);
+            });
+          });
+      }
     });
-</script>
+  </script>
 @endpush
