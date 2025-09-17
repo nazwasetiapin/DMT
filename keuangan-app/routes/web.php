@@ -7,6 +7,8 @@ use App\Http\Controllers\TypeController;
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\SubCategoryController;
 use App\Http\Controllers\TransactionController;
+use App\Http\Controllers\ReportController;
+
 
 Route::get('/dashboard', [DashboardController::class, 'index'])
     ->middleware(['auth', 'verified'])
@@ -61,5 +63,9 @@ Route::middleware(['auth'])->group(function () {
 Route::get('/get-subcategories/{category_id}', [SubCategoryController::class, 'getByCategory'])
     ->middleware('auth')
     ->name('subcategories.byCategory');
+
+Route::middleware(['auth'])->group(function () {
+    Route::get('/report/generate', [ReportController::class, 'generate'])->name('report.generate');
+});
 
 require __DIR__.'/auth.php';
