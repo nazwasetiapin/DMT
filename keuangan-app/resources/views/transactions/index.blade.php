@@ -10,17 +10,53 @@
   @endif
 
   <div class="card shadow mb-4">
-    <div class="card-header py-3 d-flex justify-content-between">
+    <div class="card-header py-3 d-flex justify-content-between align-items-center w-100">
       <h6 class="m-0 font-weight-bold text-primary">Daftar Transaksi</h6>
 
-      {{-- Admin saja yang bisa tambah transaksi --}}
-      @if($role === 'admin')
-        <a href="{{ route('transactions.create') }}" class="btn btn-primary btn-sm">
-          + Tambah Transaksi
-        </a>
-      @endif
+      <div class="d-flex align-items-center">
+        {{-- Filter month & year --}}
+        <form method="GET" action="{{ route('transactions.index') }}" class="form-inline mr-2">
+          <div class="form-group mr-2">
+            <select name="month" class="form-control form-control-sm">
+              <option value="">Semua Bulan</option>
+              @foreach(range(1,12) as $m)
+                <option value="{{ $m }}" {{ request('month') == $m ? 'selected' : '' }}>
+                  {{ \Carbon\Carbon::createFromDate(null, $m, 1)->format('F') }}
+                </option>
+              @endforeach
+            </select>
+          </div>
+
+          <div class="form-group mr-2">
+            <select name="year" class="form-control form-control-sm">
+              <option value="">Semua Tahun</option>
+              @foreach($years as $y)
+                <option value="{{ $y }}" {{ request('year') == $y ? 'selected' : '' }}>{{ $y }}</option>
+              @endforeach
+            </select>
+          </div>
+
+          <button class="btn btn-primary btn-sm mr-2">Filter</button>
+          <a href="{{ route('transactions.index') }}" class="btn btn-secondary btn-sm">Reset</a>
+        </form>
+
+        {{-- Admin tambah transaksi --}}
+        @if($role === 'admin')
+          <a href="{{ route('transactions.create') }}" class="btn btn-primary btn-sm">
+            + Tambah Transaksi
+          </a>
+        @endif
+      </div>
     </div>
+
     <div class="card-body">
+      {{-- Info total filter --}}
+      @if(request()->filled('month') || request()->filled('year'))
+        <p class="small">
+          Total transaksi : <strong>Rp {{ number_format($transactions->sum('amount'), 0, ',', '.') }}</strong>
+        </p>
+      @endif
+
       <div class="table-responsive">
         <table class="table table-bordered" width="100%" cellspacing="0">
           <thead>
@@ -38,14 +74,14 @@
             </tr>
           </thead>
           <tbody>
-            @foreach($transactions as $index => $trx)
+            @forelse($transactions as $index => $trx)
               <tr>
                 <td>{{ $index+1 }}</td>
                 <td>{{ $trx->type->name ?? '-' }}</td>
                 <td>{{ $trx->category->name ?? '-' }}</td>
                 <td>{{ $trx->subCategory->name ?? '-' }}</td>
                 <td>Rp {{ number_format($trx->amount, 0, ',', '.') }}</td>
-                <td>{{ $trx->tanggal->format('d-m-Y') }}</td>
+                <td>{{ \Carbon\Carbon::parse($trx->tanggal)->format('d-m-Y') }}</td>
                 <td>{{ $trx->deskripsi }}</td>
 
                 @if($role === 'admin')
@@ -62,7 +98,13 @@
                   </td>
                 @endif
               </tr>
-            @endforeach
+            @empty
+              <tr>
+                <td colspan="{{ $role === 'admin' ? 8 : 7 }}" class="text-center">
+                  Data tidak ada
+                </td>
+              </tr>
+            @endforelse
           </tbody>
         </table>
       </div>
