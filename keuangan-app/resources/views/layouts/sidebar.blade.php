@@ -1,99 +1,120 @@
 <!-- Sidebar -->
-<ul class="navbar-nav bg-gradient-primary sidebar sidebar-dark accordion" id="accordionSidebar">
+    <ul class="navbar-nav sidebar sidebar-dark accordion" id="accordionSidebar"
+        style="background: linear-gradient(180deg,#1e3c72,#2a5298,#3f86c2,#6dd5ed);">
 
-  <!-- Brand -->
-  <a class="sidebar-brand d-flex align-items-center justify-content-center" href="/">
-    <div class="sidebar-brand-icon rotate-n-15">
-      <i class="fas fa-coins"></i>
-    </div>
-    <div class="sidebar-brand-text mx-3">Keuangan Perusahaan</div>
+      <!-- Brand -->
+      <a class="sidebar-brand d-flex align-items-center justify-content-center" href="/">
+        <div class="sidebar-brand-icon">
+          <i class="fas fa-wallet"></i>
+        </div>
+        <div class="sidebar-brand-text mx-3 font-weight-bold">Finance <sup>App</sup></div>
+      </a>
+
+      <hr class="sidebar-divider my-0">
+
+      <!-- Dashboard -->
+      <li class="nav-item {{ request()->is('dashboard') ? 'active' : '' }}">
+        <a class="nav-link" href="{{ url('/dashboard') }}">
+          <i class="fas fa-fw fa-tachometer-alt text-info"></i>
+          <span class="menu-text">Dashboard</span>
+        </a>
+      </li>
+
+      <hr class="sidebar-divider">
+
+      {{-- ================= ADMIN MENU ================= --}}
+      @if(auth()->user()->role === 'admin' || auth()->user()->role == 1)
+        <div class="sidebar-heading text-light">Transaksi</div>
+        <li class="nav-item {{ request()->is('transactions*') ? 'active' : '' }}">
+          <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseTransactionsAdmin"
+            aria-expanded="true" aria-controls="collapseTransactionsAdmin">
+            <i class="fas fa-exchange-alt text-warning"></i>
+            <span class="menu-text">Kelola Transaksi</span>
+          </a>
+          <div id="collapseTransactionsAdmin"
+               class="collapse {{ request()->is('transactions*') ? 'show' : '' }}"
+               data-parent="#accordionSidebar">
+            <div class="bg-white py-2 collapse-inner rounded">
+              <a class="collapse-item {{ request()->is('transactions/create') ? 'active' : '' }}"
+                 href="{{ route('transactions.create') }}">
+                 <i class="fas fa-plus-circle mr-2 text-primary"></i> Tambah Transaksi
+              </a>
+              <a class="collapse-item {{ request()->is('transactions') ? 'active' : '' }}"
+                 href="{{ route('transactions.index') }}">
+                 <i class="fas fa-list-ul mr-2 text-success"></i> Daftar Transaksi
+              </a>
+            </div>
+          </div>
+        </li>
+
+        <hr class="sidebar-divider">
+
+        <div class="sidebar-heading text-light">Master Data</div>
+        <li class="nav-item {{ request()->is('types*','categories*','sub-categories*') ? 'active' : '' }}">
+          <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseMaster"
+             aria-expanded="false" aria-controls="collapseMaster">
+              <i class="fas fa-database text-success"></i>
+              <span class="menu-text">Data Referensi</span>
+          </a>
+          <div id="collapseMaster"
+               class="collapse {{ request()->is('types*','categories*','sub-categories*') ? 'show' : '' }}"
+               data-parent="#accordionSidebar">
+            <div class="bg-white py-2 collapse-inner rounded">
+              <a class="collapse-item {{ request()->is('types*') ? 'active' : '' }}" href="{{ url('/types') }}">
+                <i class="fas fa-tags mr-2 text-info"></i> Jenis Transaksi
+              </a>
+              <a class="collapse-item {{ request()->is('categories*') ? 'active' : '' }}" href="{{ url('/categories') }}">
+                <i class="fas fa-folder-open mr-2 text-warning"></i> Kategori
+              </a>
+              <a class="collapse-item {{ request()->is('sub-categories*') ? 'active' : '' }}" href="{{ url('/sub-categories') }}">
+                <i class="fas fa-folder-plus mr-2 text-danger"></i> Sub Kategori
+              </a>
+            </div>
+          </div>
+        </li>
+        <hr class="sidebar-divider">
+      @endif
+
+      {{-- ================= CEO MENU ================= --}}
+      @if(auth()->user()->role === 'ceo' || auth()->user()->role == 2)
+        <div class="sidebar-heading text-light">Transaksi</div>
+        <li class="nav-item {{ request()->is('transactions') ? 'active' : '' }}">
+          <a class="nav-link" href="{{ route('transactions.index') }}">
+            <i class="fas fa-exchange-alt text-success"></i>
+            <span class="menu-text">Daftar Transaksi</span>
+          </a>
+        </li>
+        <hr class="sidebar-divider">
+      @endif
+
+      <div class="sidebar-heading text-light">Menu Utama</div>
+
+<li class="nav-item {{ request()->is('/') ? 'active' : '' }}">
+  <a class="nav-link" href="{{ url('/') }}">
+    <i class="fas fa-fw fa-home text-light"></i>
+    <span class="menu-text">Home</span>
   </a>
+</li>
 
-  <hr class="sidebar-divider my-0">
+<!-- Logout -->
+<li class="nav-item">
+  <a class="nav-link" href="#"
+     onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
+    <i class="fas fa-sign-out-alt text-light"></i>
+    <span class="menu-text">Logout</span>
+  </a>
+  <form id="logout-form" action="{{ route('logout') }}" method="POST" class="d-none">
+    @csrf
+  </form>
+</li>
 
-  <!-- Dashboard -->
-  <li class="nav-item {{ request()->is('dashboard') ? 'active' : '' }}">
-    <a class="nav-link" href="{{ url('/dashboard') }}">
-      <i class="fas fa-fw fa-tachometer-alt"></i>
-      <span>Dashboard</span>
-    </a>
-  </li>
-
-  <hr class="sidebar-divider">
-
-  {{-- ================= ADMIN MENU ================= --}}
-  @if(auth()->user()->role === 'admin' || auth()->user()->role == 1)
-    <!-- Heading Transaksi -->
-    <div class="sidebar-heading">Transaksi</div>
-
-    <!-- Transaksi Collapse Menu -->
-    <li class="nav-item {{ request()->is('transactions*') ? 'active' : '' }}">
-      <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseTransactionsAdmin"
-        aria-expanded="true" aria-controls="collapseTransactionsAdmin">
-        <i class="fas fa-exchange-alt"></i>
-        <span>Transaksi</span>
-      </a>
-      <div id="collapseTransactionsAdmin" class="collapse {{ request()->is('transactions*') ? 'show' : '' }}" aria-labelledby="headingTransactions" data-parent="#accordionSidebar">
-        <div class="bg-white py-2 collapse-inner rounded">
-          <a class="collapse-item {{ request()->is('transactions/create') ? 'active' : '' }}" href="{{ route('transactions.create') }}">Input Transaksi</a>
-          <a class="collapse-item {{ request()->is('transactions') ? 'active' : '' }}" href="{{ route('transactions.index') }}">Data Transaksi</a>
-        </div>
-      </div>
-    </li>
-
-    <hr class="sidebar-divider">
-
-    <!-- Master Data -->
-    <div class="sidebar-heading">Master Data</div>
-
-    <li class="nav-item">
-      <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseAddData"
-          aria-expanded="false" aria-controls="collapseAddData">
-          <i class="fas fa-database"></i>
-          <span>Master Data</span>
-      </a>
-      <div id="collapseAddData" class="collapse" aria-labelledby="headingAddData" data-parent="#accordionSidebar">
-        <div class="bg-white py-2 collapse-inner rounded">
-          <a class="collapse-item" href="{{ url('/types') }}">Tipe</a>
-          <a class="collapse-item" href="{{ url('/categories') }}">Category</a>
-          <a class="collapse-item" href="{{ url('/sub-categories') }}">Sub Category</a>
-        </div>
-      </div>
-    </li>
-    <hr class="sidebar-divider">
-  @endif
-
-  {{-- ================= CEO MENU ================= --}}
-  @if(auth()->user()->role === 'ceo' || auth()->user()->role == 2)
-    <!-- Heading Transaksi -->
-    <div class="sidebar-heading">Transaksi</div>
-
-    <!-- Transaksi untuk CEO (hanya Data Transaksi) -->
-    <li class="nav-item {{ request()->is('transactions') ? 'active' : '' }}">
-      <a class="nav-link" href="{{ route('transactions.index') }}">
-        <i class="fas fa-exchange-alt"></i>
-        <span>Data Transaksi</span>
-      </a>
-    </li>
-
-    <hr class="sidebar-divider">
-  @endif
-
-  <!-- Menu Utama -->
-  <div class="sidebar-heading">Menu Utama</div>
-  <li class="nav-item">
-    <a class="nav-link" href="{{ url('/') }}">
-      <i class="fas fa-fw fa-home"></i>
-      <span>Home</span>
-    </a>
-  </li>
-  
-  <hr class="sidebar-divider d-none d-md-block">
-
-  <!-- Sidebar Toggler -->
-  <div class="text-center d-none d-md-inline">
-    <button class="rounded-circle border-0" id="sidebarToggle"></button>
-  </div>
-
+<hr class="sidebar-divider d-none d-md-block">
 </ul>
 <!-- End of Sidebar -->
+
+      <hr class="sidebar-divider d-none d-md-block">
+    </ul>
+    <!-- End of Sidebar -->
+
+    <!-- Content Wrapper -->
+    <div id="content-wrapper" class="d-flex flex-column w-100">
