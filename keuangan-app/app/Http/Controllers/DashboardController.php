@@ -8,27 +8,60 @@ use Illuminate\Http\Request;
 
 class DashboardController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
-        $totalTransaksi = Transaction::count();
+        // Pilihan tahun (bisa dikirim via query ?year=2025). Default = tahun sekarang
+        $year = $request->get('year', date('Y'));
 
-        // Ambil ID type berdasarkan name
+        // Ambil id type Pemasukan / Pengeluaran (sesuaikan nama di tabel types)
         $pemasukanId   = Type::where('name', 'Pemasukan')->value('id');
         $pengeluaranId = Type::where('name', 'Pengeluaran')->value('id');
 
-        // Hitung total berdasarkan type_id
-        $totalPemasukan   = $pemasukanId ? Transaction::where('type_id', $pemasukanId)->sum('amount') : 0;
-        $totalPengeluaran = $pengeluaranId ? Transaction::where('type_id', $pengeluaranId)->sum('amount') : 0;
+        // Hitung total
+        $totalPemasukan   = $pemasukanId ? (float) Transaction::where('type_id', $pemasukanId)->sum('amount') : 0;
+        $totalPengeluaran = $pengeluaranId ? (float) Transaction::where('type_id', $pengeluaranId)->sum('amount') : 0;
+        $totalTransaksi   = Transaction::count();
+        $saldoAkhir       = $totalPemasukan - $totalPengeluaran;
 
-        $saldoAkhir = $totalPemasukan - $totalPengeluaran;
+        // Labels bulan
+        $labels = ['Jan','Feb','Mar','Apr','Mei','Jun','Jul','Agu','Sep','Okt','Nov','Des'];
 
+        // Data per bulan
+        $dataPemasukan = [];
+        $dataPengeluaran = [];
+        for ($m = 1; $m <= 12; $m++) {
+            $dataPemasukan[] = $pemasukanId
+                ? (float) Transaction::where('type_id', $pemasukanId)
+                    ->whereYear('created_at', $year)
+                    ->whereMonth('created_at', $m)
+                    ->sum('amount')
+                : 0;
+
+            $dataPengeluaran[] = $pengeluaranId
+                ? (float) Transaction::where('type_id', $pengeluaranId)
+                    ->whereYear('created_at', $year)
+                    ->whereMonth('created_at', $m)
+                    ->sum('amount')
+                : 0;
+        }
+
+        // Transaksi terbaru
+        $latestTransactions = Transaction::with(['type','category','subCategory'])
+            ->orderBy('created_at','desc')
+            ->limit(8)
+            ->get();
+
+        // Kirim ke view
         return view('dashboard', compact(
-            'totalTransaksi',
             'totalPemasukan',
             'totalPengeluaran',
-            'saldoAkhir'
+            'totalTransaksi',
+            'saldoAkhir',
+            'labels',
+            'dataPemasukan',
+            'dataPengeluaran',
+            'latestTransactions',
+            'year'
         ));
-
-        
     }
 }
