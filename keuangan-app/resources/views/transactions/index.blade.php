@@ -41,6 +41,8 @@
         </form>
 
         
+      </div>
+    </div>
 
     <div class="card-body">
       {{-- Info total filter --}}
