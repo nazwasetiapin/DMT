@@ -4,8 +4,10 @@
 
 @section('content')
     <!-- Page Heading -->
-    <div class="d-sm-flex align-items-center justify-content-between mb-4">
-        <h1 class="h3 mb-0 text-blue-800">Dashboard</h1>
+   <div class="d-sm-flex align-items-center justify-content-between mb-4">
+    <h1 class="h2 fw-bold text-primary">
+        <i class="fas fa-tachometer-alt me-2"></i> Dashboard
+    </h1>
         <a href="{{ route('report.generate') }}" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm">
             <i class="fas fa-download fa-sm text-white-50"></i> Generate Report
         </a>

@@ -1,6 +1,6 @@
 <!-- layouts/topbar.blade.php -->
 <nav class="navbar navbar-expand navbar-light topbar mb-4 static-top shadow"
-  style="background: linear-gradient(90deg, #ffffffff 0%, #e3effb 65%, #d1e6f9 100%);">
+  style="background: linear-gradient(90deg, #ced7f2ff 0%, #a6c2dfff 65%, #619dd2ff 100%);">
 
 
   <!-- Tombol Menu (Garis Tiga) di kiri -->
@@ -46,10 +46,11 @@
       <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button" data-toggle="dropdown"
         aria-haspopup="true" aria-expanded="false">
         <span class="mr-2 d-none d-lg-inline text-dark small">
-          {{ Auth::user()->name ?? 'Guest' }}
+          {{ Auth::user()->name ?? 'Admin' }}
         </span>
-        <img class="img-profile rounded-circle border"
-          src="https://ui-avatars.com/api/?name={{ urlencode(Auth::user()->name ?? 'Guest') }}&background=0D8ABC&color=fff" />
+       <img class="img-profile rounded-circle border"
+  src="{{ asset('sb-admin2/img/admin.jpg') }}" alt="User Profile">
+
       </a>
       <div class="dropdown-menu dropdown-menu-right shadow animated--fade-in" aria-labelledby="userDropdown">
         <a class="dropdown-item" href="{{ url('profile') }}">
