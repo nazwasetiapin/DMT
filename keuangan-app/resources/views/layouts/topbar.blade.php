@@ -45,9 +45,13 @@
     <li class="nav-item dropdown no-arrow">
       <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button" data-toggle="dropdown"
         aria-haspopup="true" aria-expanded="false">
-        <span class="mr-2 d-none d-lg-inline text-dark small">
-          {{ Auth::user()->name ?? 'Admin' }}
-        </span>
+      <span class="mr-2 d-none d-lg-inline text-dark small">
+    @if(Auth::check())
+        {{ ucfirst(Auth::user()->role) }}
+    @endif
+</span>
+
+
        <img class="img-profile rounded-circle border"
   src="{{ asset('sb-admin2/img/admin.jpg') }}" alt="User Profile">
 
