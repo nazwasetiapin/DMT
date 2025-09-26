@@ -8,9 +8,11 @@
   <meta name="description" content="">
   <meta name="keywords" content="">
 
-  <!-- Favicons -->`
-  <link href="{{ asset('assets/img/construction/favicon.ico') }}" rel="icon" type="image/x-icon">
-  <link href="{{ asset('assets/img/construction/favicon.ico') }}" rel="apple-touch-icon">
+<!-- Favicon -->
+<link rel="icon" type="image/png" sizes="32x32" href="{{ asset('assets/img/construction/favicon-new.png') }}">
+<link rel="apple-touch-icon" href="{{ asset('assets/img/construction/favicon-new.png') }}">
+
+
 
 
 

@@ -79,6 +79,24 @@ hr {
   overflow: visible;
 }
 
+.text-primary {
+    color: #0d6efd !important; /* Biru elegan */
+}
+
+.btn-gradient {
+    background: linear-gradient(90deg, #4e73df, #1cc88a);
+    border: none;
+    color: white;
+    font-weight: bold;
+    transition: 0.3s ease;
+}
+
+.btn-gradient:hover {
+    opacity: 0.9;
+    transform: scale(1.05);
+}
+
+
 h1, h2, h3, h4, h5, h6 {
   margin-top: 0;
   margin-bottom: 0.5rem;
