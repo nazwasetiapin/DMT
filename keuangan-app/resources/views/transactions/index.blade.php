@@ -40,12 +40,7 @@
           <a href="{{ route('transactions.index') }}" class="btn btn-secondary btn-sm">Reset</a>
         </form>
 
-        {{-- Admin tambah transaksi --}}
-        @if($role === 'admin')
-          <a href="{{ route('transactions.create') }}" class="btn btn-primary btn-sm">
-            + Tambah Transaksi
-          </a>
-        @endif
+        
       </div>
     </div>
 
