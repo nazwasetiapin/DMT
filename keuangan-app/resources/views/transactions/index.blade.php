@@ -5,7 +5,7 @@
 @section('content')
   <h1 class="h3 mb-4 text-gray-800">Data Transaksi</h1>
 
-  @if(session('success'))
+  @if (session('success'))
     <div class="alert alert-success">{{ session('success') }}</div>
   @endif
 
@@ -19,7 +19,7 @@
           <div class="form-group mr-2">
             <select name="month" class="form-control form-control-sm">
               <option value="">Semua Bulan</option>
-              @foreach(range(1,12) as $m)
+              @foreach(range(1, 12) as $m)
                 <option value="{{ $m }}" {{ request('month') == $m ? 'selected' : '' }}>
                   {{ \Carbon\Carbon::createFromDate(null, $m, 1)->format('F') }}
                 </option>
@@ -40,7 +40,7 @@
           <a href="{{ route('transactions.index') }}" class="btn btn-secondary btn-sm">Reset</a>
         </form>
 
-        
+
       </div>
     </div>
 
@@ -71,7 +71,7 @@
           <tbody>
             @forelse($transactions as $index => $trx)
               <tr>
-                <td>{{ $index+1 }}</td>
+                <td>{{ $index + 1 }}</td>
                 <td>{{ $trx->type->name ?? '-' }}</td>
                 <td>{{ $trx->category->name ?? '-' }}</td>
                 <td>{{ $trx->subCategory->name ?? '-' }}</td>
@@ -84,13 +84,17 @@
                     <a href="{{ route('transactions.edit', $trx->id) }}" class="btn btn-sm btn-warning">
                       <i class="fas fa-edit"></i>
                     </a>
-                    <form action="{{ route('transactions.destroy', $trx->id) }}" method="POST" class="d-inline">
-                      @csrf @method('DELETE')
-                      <button class="btn btn-sm btn-danger" onclick="return confirm('Hapus transaksi ini?')">
+
+                    <form id="delete-form-{{ $trx->id }}" action="{{ route('transactions.destroy', $trx->id) }}" method="POST"
+                      class="d-inline">
+                      @csrf
+                      @method('DELETE')
+                      <button type="button" onclick="confirmDelete({{ $trx->id }})" class="btn btn-sm btn-danger">
                         <i class="fas fa-trash"></i>
                       </button>
                     </form>
                   </td>
+
                 @endif
               </tr>
             @empty
@@ -106,4 +110,3 @@
     </div>
   </div>
 @endsection
-

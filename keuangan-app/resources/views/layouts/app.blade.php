@@ -62,6 +62,35 @@
     }
   </script>
 
+<!-- pesan data sukses di tambahkan -->
+  <script>
+  document.addEventListener('DOMContentLoaded', function () {
+    let successMessage = document.querySelector('meta[name="flash-success"]')?.content;
+    let errorMessage   = document.querySelector('meta[name="flash-error"]')?.content;
+
+    if (successMessage) {
+      Swal.fire({
+        icon: 'success',
+        title: 'Berhasil',
+        text: successMessage,
+        showConfirmButton: false,
+        timer: 2000
+      });
+    }
+
+    if (errorMessage) {
+      Swal.fire({
+        icon: 'error',
+        title: 'Gagal',
+        text: errorMessage,
+        showConfirmButton: false,
+        timer: 2000
+      });
+    }
+  });
+</script>
+
+
 
 
 

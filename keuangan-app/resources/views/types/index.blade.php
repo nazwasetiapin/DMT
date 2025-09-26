@@ -47,7 +47,6 @@
                                             <i class="fas fa-trash"></i>
                                         </button>
                                     </form>
-
                                 </td>
                             </tr>
                         @endforeach
