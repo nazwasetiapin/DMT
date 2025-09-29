@@ -45,12 +45,7 @@
     </div>
 
     <div class="card-body">
-      {{-- Info total filter --}}
-      @if(request()->filled('month') || request()->filled('year'))
-        <p class="small">
-          Total transaksi : <strong>Rp {{ number_format($transactions->sum('amount'), 0, ',', '.') }}</strong>
-        </p>
-      @endif
+      
 
       <div class="table-responsive">
         <table class="table table-bordered" width="100%" cellspacing="0">
