@@ -23,8 +23,8 @@
                     <thead class="thead-light">
                         <tr>
                             <th>No</th>
-                            <th>Jenis Transksi</th>
-                            <th>Aksi</th>
+                            <th>Jenis</th>
+                            <th>Action</th>
                         </tr>
                     </thead>
                     <tbody>
