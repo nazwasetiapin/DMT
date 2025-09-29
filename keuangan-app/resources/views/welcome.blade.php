@@ -52,7 +52,7 @@
 
       <div class="container position-relative d-flex align-items-center justify-content-between">
         <a href="index.html" class="logo d-flex align-items-center">
-          <h1 class="sitename">Financial management</h1>
+          <h1 class="sitename">App Keuangan</h1>
         </a>
 
         <nav id="navmenu" class="navmenu">
@@ -78,19 +78,12 @@
         <div class="row align-items-center">
           <div class="col-lg-6">
             <div class="hero-content" data-aos="fade-right" data-aos-delay="200">
-              <h1>Financial management</h1>
+              <h1>App Keuangan</h1>
               <p>
                 Aplikasi manajemen keuangan ini dirancang untuk membantu perusahaan dalam mencatat, mengelola, dan
                 memantau kondisi finansial secara menyeluruh. Mulai dari pencatatan pemasukan dan pengeluaran harian,
                 pengelompokan transaksi berdasarkan kategori, hingga penyusunan laporan keuangan bulanan yang detail dan
                 mudah dipahami.
-
-              <ul>
-                <li>Mengelola transaksi pemasukan dan pengeluaran secara real-time</li>
-                <li>Melihat ringkasan keuangan dalam grafik atau tabel interaktif</li>
-                <li>Membuat laporan bulanan secara otomatis</li>
-                <li>Menjaga transparansi serta akurasi dalam pencatatan keuangan</li>
-              </ul>
               </p>
 
 
