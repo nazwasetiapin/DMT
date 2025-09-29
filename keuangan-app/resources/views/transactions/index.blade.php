@@ -5,6 +5,7 @@
 @section('content')
 <div class="section">
   <div class="section-header">
+    <h1><i class="fas fa-list mr-2"></i> Data Transaksi</h1>
   </div>
 
   <div class="section-body">

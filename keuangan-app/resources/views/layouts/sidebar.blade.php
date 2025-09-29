@@ -61,13 +61,13 @@
                data-parent="#accordionSidebar">
             <div class="bg-white py-2 collapse-inner rounded">
               <a class="collapse-item {{ request()->is('types*') ? 'active' : '' }}" href="{{ url('/types') }}">
-                <i class="fas fa-tags mr-2 text-info"></i> Jenis Transaksi
+                <i class="fas fa-tags mr-2 text-info"></i> Tipe Transaksi
               </a>
               <a class="collapse-item {{ request()->is('categories*') ? 'active' : '' }}" href="{{ url('/categories') }}">
-                <i class="fas fa-folder-open mr-2 text-warning"></i> Kategori
+                <i class="fas fa-folder-open mr-2 text-warning"></i> Periode Transaksi
               </a>
               <a class="collapse-item {{ request()->is('sub-categories*') ? 'active' : '' }}" href="{{ url('/sub-categories') }}">
-                <i class="fas fa-folder-plus mr-2 text-danger"></i> Sub Kategori
+                <i class="fas fa-folder-plus mr-2 text-danger"></i> Jenis Transaksi
               </a>
             </div>
           </div>
