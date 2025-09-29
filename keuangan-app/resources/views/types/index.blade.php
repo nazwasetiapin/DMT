@@ -1,10 +1,10 @@
 @extends('layouts.app')
 
-@section('title', 'Daftar Types')
+@section('title', 'Types')
 
 @section('content')
     <div class="d-flex justify-content-between align-items-center mb-3">
-        <h1 class="h3 mb-0 text-gray-800">Daftar Tipe</h1>
+        <h1 class="h3 mb-0 text-gray-800">Daftar Tipe Transaksi</h1>
         <a href="{{ route('types.create') }}" class="btn btn-primary">
             <i class="bi bi-plus-circle"></i> Tambah Tipe
         </a>
@@ -15,7 +15,7 @@
     @endif
 
     @if ($types->isEmpty())
-        <div class="alert alert-info">Belum ada data type.</div>
+        <div class="alert alert-info">Belum ada data .</div>
     @else
         <div class="card shadow">
             <div class="card-body">
@@ -23,8 +23,8 @@
                     <thead class="thead-light">
                         <tr>
                             <th>No</th>
-                            <th>Nama Tipe</th>
-                            <th>Aksi</th>
+                            <th>Tipe</th>
+                            <th>Action</th>
                         </tr>
                     </thead>
                     <tbody>

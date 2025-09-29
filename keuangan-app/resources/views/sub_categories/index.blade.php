@@ -1,12 +1,12 @@
 @extends('layouts.app')
 
-@section('title', 'Daftar Sub Categories')
+@section('title', 'Sub Categories')
 
 @section('content')
     <div class="d-flex justify-content-between align-items-center mb-3">
-        <h1 class="h3 mb-0 text-gray-800">Daftar Sub Categories</h1>
+        <h1 class="h3 mb-0 text-gray-800">Daftar Jenis Transaksi</h1>
         <a href="{{ route('sub-categories.create') }}" class="btn btn-primary">
-            <i class="bi bi-plus-circle"></i> Tambah Sub Category
+            <i class="bi bi-plus-circle"></i> Tambah Jenis
         </a>
     </div>
 
@@ -15,7 +15,7 @@
     @endif
 
     @if ($subCategories->isEmpty())
-        <div class="alert alert-info">Belum ada data sub category.</div>
+        <div class="alert alert-info">Belum ada data.</div>
     @else
         <div class="card shadow">
             <div class="card-body">
@@ -23,7 +23,7 @@
                     <thead class="thead-light">
                         <tr>
                             <th>No</th>
-                            <th>Nama Sub Category</th>
+                            <th>Jenis Transksi</th>
                             <th>Aksi</th>
                         </tr>
                     </thead>
