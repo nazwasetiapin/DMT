@@ -3,83 +3,143 @@
 @section('title', 'Input Transaksi')
 
 @section('content')
-  <h1 class="h3 mb-4 text-gray-800">Input Transaksi</h1>
+<div class="section">
+  <div class="section-header">
+  </div>
 
-  <div class="card shadow mb-4">
-    <div class="card-body">
-      <form action="{{ route('transactions.store') }}" method="POST">
-        @csrf
+  <div class="section-body">
+    <div class="card shadow-lg border-0">
+      <div class="card-header bg-gradient-primary text-white">
+        <h4 class="mb-0 h4 font-weight-bold">
+          <i class="fas fa-plus-circle mr-2"></i> Add Transaksi</h4>
+      </div>
 
-        <div class="form-group">
-          <label>Tipe Transaksi</label>
-          <select name="type_id" class="form-control" required>
-            @foreach($types as $type)
-              <option value="{{ $type->id }}">{{ $type->name }}</option>
-            @endforeach
-          </select>
-        </div>
+      <div class="card-body p-4">
+        <form action="{{ route('transactions.store') }}" method="POST">
+          @csrf
 
-        <div class="form-group">
-          <label>Category</label>
-          <select name="category_id" id="category_id" class="form-control" required>
-            <option value="">-- Pilih Category --</option>
-            @foreach($categories as $category)
-              <option value="{{ $category->id }}">{{ $category->name }}</option>
-            @endforeach
-          </select>
-        </div>
+          <div class="form-row">
+            <!-- Tipe Transaksi -->
+            <div class="form-group col-md-6">
+              <label><i class="fas fa-random mr-1 text-primary"></i> Tipe Transaksi</label>
+              <select name="type_id" class="form-control shadow-sm @error('type_id') is-invalid @enderror" required>
+                <option value="">-- Pilih Tipe --</option>
+                @foreach($types as $type)
+                  <option value="{{ $type->id }}" {{ old('type_id') == $type->id ? 'selected' : '' }}>
+                    {{ $type->name }}
+                  </option>
+                @endforeach
+              </select>
+              @error('type_id')
+                <div class="invalid-feedback">{{ $message }}</div>
+              @enderror
+            </div>
 
-        <div class="form-group">
-          <label>Sub Category</label>
-          <select name="sub_category_id" id="sub_category_id" class="form-control">
-            <option value="">-- Pilih Sub Category --</option>
-          </select>
-        </div>
+            <!-- Periode -->
+            <div class="form-group col-md-6">
+              <label><i class="fas fa-calendar-alt mr-1 text-info"></i> Periode</label>
+              <select name="category_id" id="category_id" class="form-control shadow-sm @error('category_id') is-invalid @enderror" required>
+                <option value="">-- Pilih Periode Transaksi --</option>
+                @foreach($categories as $category)
+                  <option value="{{ $category->id }}" {{ old('category_id') == $category->id ? 'selected' : '' }}>
+                    {{ $category->name }}
+                  </option>
+                @endforeach
+              </select>
+              @error('category_id')
+                <div class="invalid-feedback">{{ $message }}</div>
+              @enderror
+            </div>
+          </div>
 
-        <div class="form-group">
-          <label>Nominal</label>
-          <input type="number" name="amount" class="form-control" required>
-        </div>
+          <div class="form-row">
+            <!-- Jenis Biaya -->
+            <div class="form-group col-md-6">
+              <label><i class="fas fa-list-ul mr-1 text-warning"></i> Jenis Transaksi</label>
+              <select name="sub_category_id" id="sub_category_id" class="form-control shadow-sm @error('sub_category_id') is-invalid @enderror">
+                <option value="">-- Pilih Jenis Transaksi --</option>
+              </select>
+              @error('sub_category_id')
+                <div class="invalid-feedback">{{ $message }}</div>
+              @enderror
+            </div>
 
-        <div class="form-group">
-          <label for="tanggal">Tanggal</label>
-          <input type="date" name="tanggal" id="tanggal" class="form-control"
-            value="{{ old('tanggal', isset($trx) ? $trx->tanggal->format('Y-m-d') : '') }}" required>
-        </div>
+            <!-- Nominal -->
+            <div class="form-group col-md-6">
+              <label><i class="fas fa-money-bill-wave mr-1 text-success"></i> Nominal</label>
+              <input type="number" name="amount" class="form-control shadow-sm @error('amount') is-invalid @enderror" 
+                     placeholder="Masukkan jumlah" value="{{ old('amount') }}" required>
+              @error('amount')
+                <div class="invalid-feedback">{{ $message }}</div>
+              @enderror
+            </div>
+          </div>
 
-        <div class="form-group">
-          <label>Deskripsi</label>
-          <textarea name="deskripsi" class="form-control"></textarea>
-        </div>
+          <!-- Tanggal -->
+          <div class="form-row">
+            <div class="form-group col-md-12">
+              <label><i class="fas fa-calendar-day mr-1 text-danger"></i> Tanggal</label>
+              <input type="date" name="tanggal" id="tanggal" class="form-control shadow-sm @error('tanggal') is-invalid @enderror"
+                     value="{{ old('tanggal', isset($trx) ? $trx->tanggal->format('Y-m-d') : '') }}" required>
+              @error('tanggal')
+                <div class="invalid-feedback">{{ $message }}</div>
+              @enderror
+            </div>
+          </div>
 
-        <button class="btn btn-primary">Simpan</button>
-        <a href="{{ route('transactions.index') }}" class="btn btn-secondary">Batal</a>
-      </form>
+          <!-- Deskripsi -->
+          <div class="form-row">
+            <div class="form-group col-md-12">
+              <label><i class="fas fa-pencil-alt mr-1 text-secondary"></i> Deskripsi</label>
+              <textarea name="deskripsi" class="form-control shadow-sm @error('deskripsi') is-invalid @enderror" 
+                        rows="3" placeholder="Tuliskan keterangan...">{{ old('deskripsi') }}</textarea>
+              @error('deskripsi')
+                <div class="invalid-feedback">{{ $message }}</div>
+              @enderror
+            </div>
+          </div>
+
+          <div class="d-flex justify-content-end mt-4">
+            <a href="{{ route('transactions.index') }}" class="btn btn-light border mr-2">
+              <i class="fas fa-times mr-1"></i> Batal
+            </a>
+            <button type="submit" class="btn btn-primary shadow-sm">
+              <i class="fas fa-save mr-1"></i> Simpan
+            </button>
+          </div>
+        </form>
+      </div>
     </div>
   </div>
+</div>
 @endsection
 
 @push('scripts')
-  <script>
-    document.getElementById('category_id').addEventListener('change', function () {
-      let categoryId = this.value;
-      let subCategorySelect = document.getElementById('sub_category_id');
+<script>
+  document.getElementById('category_id').addEventListener('change', function () {
+    let categoryId = this.value;
+    let subCategorySelect = document.getElementById('sub_category_id');
 
-      // reset pilihan
-      subCategorySelect.innerHTML = '<option value="">-- Pilih Sub Kategori --</option>';
+    subCategorySelect.innerHTML = '<option value="">Memuat data...</option>';
 
-      if (categoryId) {
-        fetch(`/get-subcategories/${categoryId}`)
-          .then(response => response.json())
-          .then(data => {
-            data.forEach(sub => {
-              let option = document.createElement('option');
-              option.value = sub.id;
-              option.textContent = sub.name;
-              subCategorySelect.appendChild(option);
-            });
+    if (categoryId) {
+      fetch(`/get-subcategories/${categoryId}`)
+        .then(response => response.json())
+        .then(data => {
+          subCategorySelect.innerHTML = '<option value="">-- Pilih Jenis Transaksi --</option>';
+          data.forEach(sub => {
+            let option = document.createElement('option');
+            option.value = sub.id;
+            option.textContent = sub.name;
+            subCategorySelect.appendChild(option);
           });
-      }
-    });
-  </script>
+        })
+        .catch(() => {
+          subCategorySelect.innerHTML = '<option value="">Gagal memuat data</option>';
+        });
+    } else {
+      subCategorySelect.innerHTML = '<option value="">-- Pilih Jenis Transaksi --</option>';
+    }
+  });
+</script>
 @endpush
