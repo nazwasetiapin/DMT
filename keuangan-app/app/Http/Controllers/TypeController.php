@@ -22,7 +22,7 @@ class TypeController extends Controller
     {
         $request->validate(['name' => 'required|string|max:255']);
         Type::create($request->all());
-        return redirect()->route('types.index')->with('success', 'Type created successfully.');
+        return redirect()->route('types.index')->with('success', 'Tipe Transaksi successfully.');
     }
 
     public function edit(Type $type)
@@ -34,12 +34,12 @@ class TypeController extends Controller
     {
         $request->validate(['name' => 'required|string|max:255']);
         $type->update($request->all());
-        return redirect()->route('types.index')->with('success', 'Type updated successfully.');
+        return redirect()->route('types.index')->with('success', 'Tipe Transaksi successfully.');
     }
 
     public function destroy(Type $type)
     {
         $type->delete();
-        return redirect()->route('types.index')->with('success', 'Type deleted successfully.');
+        return redirect()->route('types.index')->with('success', 'Tipe Transaksi deleted successfully.');
     }
 }

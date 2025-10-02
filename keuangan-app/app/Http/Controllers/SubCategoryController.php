@@ -32,7 +32,7 @@ class SubCategoryController extends Controller
             'category_id' => $request->category_id,
         ]);
 
-        return redirect()->route('sub-categories.index')->with('success', 'SubCategory created successfully.');
+        return redirect()->route('sub-categories.index')->with('success', 'Jenis Transaksi created successfully.');
     }
 
     public function edit(SubCategory $subCategory)
@@ -53,13 +53,13 @@ class SubCategoryController extends Controller
             'category_id' => $request->category_id,
         ]);
 
-        return redirect()->route('sub-categories.index')->with('success', 'SubCategory updated successfully.');
+        return redirect()->route('sub-categories.index')->with('success', 'Jenis Transaksi updated successfully.');
     }
 
     public function destroy(SubCategory $subCategory)
     {
         $subCategory->delete();
-        return redirect()->route('sub-categories.index')->with('success', 'SubCategory deleted successfully.');
+        return redirect()->route('sub-categories.index')->with('success', 'Jenis Transaksi deleted successfully.');
     }
 
     public function getByCategory($category_id)
