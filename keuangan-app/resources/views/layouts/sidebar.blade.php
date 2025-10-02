@@ -7,7 +7,7 @@
         <div class="sidebar-brand-icon">
           <i class="fas fa-wallet"></i>
         </div>
-        <div class="sidebar-brand-text mx-3 font-weight-bold">Keuangan <sup>App</sup></div>
+        <div class="sidebar-brand-text mx-3 font-weight-bold">Finance</div>
       </a>
 
       <hr class="sidebar-divider my-0">
