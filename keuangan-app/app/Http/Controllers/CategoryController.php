@@ -22,7 +22,7 @@ class CategoryController extends Controller
     {
         $request->validate(['name' => 'required|string|max:255']);
         Category::create($request->all());
-        return redirect()->route('categories.index')->with('success', 'Category created successfully.');
+        return redirect()->route('categories.index')->with('success', 'Periode created successfully.');
     }
 
     public function edit(Category $category)
@@ -34,12 +34,12 @@ class CategoryController extends Controller
     {
         $request->validate(['name' => 'required|string|max:255']);
         $category->update($request->all());
-        return redirect()->route('categories.index')->with('success', 'Category updated successfully.');
+        return redirect()->route('categories.index')->with('success', 'Periode updated successfully.');
     }
 
     public function destroy(Category $category)
     {
         $category->delete();
-        return redirect()->route('categories.index')->with('success', 'Category deleted successfully.');
+        return redirect()->route('categories.index')->with('success', 'Periode deleted successfully.');
     }
 }
