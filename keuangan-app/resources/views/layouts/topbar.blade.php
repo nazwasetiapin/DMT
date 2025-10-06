@@ -15,6 +15,7 @@
 
     @php
         $notifications = Auth::user()->unreadNotifications;
+        $user = Auth::user();
     @endphp
 
     <!-- Notifikasi -->
@@ -54,10 +55,20 @@
 
     <!-- User Info -->
     <li class="nav-item dropdown no-arrow">
-      <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button" data-toggle="dropdown"
+      <a class="nav-link dropdown-toggle d-flex align-items-center" href="#" id="userDropdown" role="button" data-toggle="dropdown"
         aria-haspopup="true" aria-expanded="false">
+        
+        <!-- Foto Profil -->
+        <img class="img-profile rounded-circle mr-2" 
+             src="{{ $user->photo ? asset('storage/' . $user->photo) : asset('./sb-admin2/img/admin.png') }}" 
+             style="width: 35px; height: 35px; object-fit: cover;">
 
+        <!-- Nama User -->
+        <span class="mr-2 d-none d-lg-inline text-gray-600 small">
+          {{ $user->name }}
+        </span>
       </a>
+
       <div class="dropdown-menu dropdown-menu-right shadow animated--fade-in" aria-labelledby="userDropdown">
         <a class="dropdown-item" href="{{ url('profile') }}">
           <i class="fas fa-user fa-sm fa-fw mr-2 text-gray-400"></i>
