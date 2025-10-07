@@ -19,10 +19,12 @@
           <tr>
             <th>Tanggal</th>
             <td>{{ $transaction->tanggal }}</td>
+            <!-- ambil data -->
           </tr>
           <tr>
             <th>Jumlah</th>
             <td>Rp {{ number_format($transaction->amount, 0, ',', '.') }}</td>
+            <!--  nilai yang akan diformat, dan pengatur format penulisan rupiah  -->
           </tr>
           <tr>
             <th>Periode</th>
