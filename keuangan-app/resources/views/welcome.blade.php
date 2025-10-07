@@ -9,8 +9,8 @@
   <meta name="keywords" content="">
 
 <!-- Favicon -->
-<link rel="icon" type="image/png" sizes="32x32" href="{{ asset('assets/img/construction/favicon-new.png') }}">
-<link rel="apple-touch-icon" href="{{ asset('assets/img/construction/favicon-new.png') }}">
+<link rel="icon" type="image/png" sizes="32x32" href="{{ asset('assets/img/construction/favicon-new2.jpg') }}">
+<link rel="apple-touch-icon" href="{{ asset('assets/img/construction/favicon-new2.jpg') }}">
 
 
 
@@ -52,7 +52,7 @@
 
       <div class="container position-relative d-flex align-items-center justify-content-between">
         <a href="index.html" class="logo d-flex align-items-center">
-          <h1 class="sitename">App Keuangan</h1>
+          <h1 class="sitename">FinancialApp</h1>
         </a>
 
         <nav id="navmenu" class="navmenu">
@@ -78,7 +78,7 @@
         <div class="row align-items-center">
           <div class="col-lg-6">
             <div class="hero-content" data-aos="fade-right" data-aos-delay="200">
-              <h1>App Keuangan</h1>
+              <h1>Financial App</h1>
               <p>
                 Aplikasi manajemen keuangan ini dirancang untuk membantu perusahaan dalam mencatat, mengelola, dan
                 memantau kondisi finansial secara menyeluruh. Mulai dari pencatatan pemasukan dan pengeluaran harian,
@@ -119,7 +119,7 @@
 
           <div class="col-lg-6" data-aos="fade-left" data-aos-delay="300">
             <div class="hero-image">
-              <img src="assets/img/construction/uang.PNG" alt="Construction Project" class="img-fluid">
+              <img src="assets/img/construction/favicon-new2.jpg" alt="Construction Project" class="img-fluid">
             </div>
           </div>
         </div>
