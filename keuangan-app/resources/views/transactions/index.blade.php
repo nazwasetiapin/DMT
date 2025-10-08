@@ -23,8 +23,10 @@
             <i class="fas fa-list mr-2"></i> Daftar Transaksi
           </h4>
 
+
+
           {{-- Filter bulan, tahun, dan jenis transaksi --}}
-          <form method="GET" action="{{ route('transactions.index') }}" class="form-inline">
+          <form method="GET" action="{{ route('transactions.index') }}" class="form-inline" id="filterForm">
 
             {{-- Filter bulan --}}
             <select name="month" class="form-control form-control-sm mr-2 shadow-sm">
@@ -60,8 +62,13 @@
             </button>
 
             {{-- Tombol reset --}}
-            <a href="{{ route('transactions.index') }}" class="btn btn-sm btn-secondary shadow-sm">
+            <a href="{{ route('transactions.index') }}" class="btn btn-sm btn-secondary shadow-sm mr-2">
               <i class="fas fa-undo mr-1"></i> Reset
+            </a>
+
+            {{-- Tombol Generate Report (PDF) --}}
+            <a href="#" id="generateReportBtn" class="btn btn-sm btn-primary shadow-sm">
+              <i class="fas fa-download fa-sm text-white-50"></i> Generate Report
             </a>
 
           </form>
@@ -90,6 +97,7 @@
             </p>
           @endif
         </div>
+
 
 
         <div class="table-responsive">
@@ -176,3 +184,25 @@
   </div>
   </div>
 @endsection
+
+@push('scripts')
+  <script>
+    // Saat tombol "Generate Report" diklik
+    document.getElementById('generateReportBtn').addEventListener('click', function (e) {
+      e.preventDefault();
+
+      // Ambil form filter
+      const form = document.getElementById('filterForm');
+      if (!form) {
+        alert('Form filter tidak ditemukan di halaman.');
+        return;
+      }
+
+      // Buat query string dari input form
+      const params = new URLSearchParams(new FormData(form)).toString();
+
+      // Buka halaman generate report di tab baru dengan filter yang sama
+      window.open(`{{ route('report.index.generate') }}?${params}`, '_blank');
+    });
+  </script>
+@endpush
