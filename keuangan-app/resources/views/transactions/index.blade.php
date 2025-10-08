@@ -104,14 +104,15 @@
                 <th>Tanggal</th>
                 <th>Deskripsi</th>
                 @if($role === 'admin')
-                  <th>Aksi</th>
+                  <th>Action</th>
                 @endif
               </tr>
             </thead>
             <tbody>
               @forelse($transactions as $index => $trx)
                 <tr>
-                  <td>{{ $index + 1 }}</td>
+                  <!-- nomor berurutan -->
+                  <td>{{ $transactions->firstItem() + $index }}</td>
                   <td>
                     @if($trx->type->name == 'Pemasukan')
                       <span class="badge badge-success px-2 py-1">
@@ -160,6 +161,11 @@
               @endforelse
             </tbody>
           </table>
+
+          <div class="d-flex justify-content-center mt-4 mb-2">
+            {{ $transactions->links() }}
+          </div>
+
         </div>
       </div>
     </div>

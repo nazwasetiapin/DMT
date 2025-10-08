@@ -74,12 +74,16 @@ class TransactionController extends Controller
 
         $role = auth()->user()->role;
 
+        $transactions = Transaction::with(['category', 'subCategory', 'type'])
+        ->latest()
+        ->paginate(8); 
+
         // Kirim juga saldo ke view
         return view('transactions.index', compact(
             'transactions',
             'totalPemasukan',
             'totalPengeluaran',
-            'saldo', 
+            'saldo',
             'role',
             'monthlySums',
             'years'
