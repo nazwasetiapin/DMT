@@ -18,7 +18,7 @@
         <!-- Pemasukan -->
         <div class="col-xl-3 col-md-6 mb-4">
             <div class="card shadow h-100 py-2"
-                style="background: linear-gradient(135deg,#ff6b6b,#ff8fab); border-radius:12px;">
+                style="background: linear-gradient(135deg,#4361ee,#6e8bff); border-radius:12px;">
                 <div class="card-body text-white">
                     <div class="row no-gutters align-items-center">
                         <div class="col mr-2">
@@ -33,12 +33,11 @@
                     </div>
                 </div>
             </div>
-        </div>
-
+        </div>  
         <!-- Pengeluaran -->
         <div class="col-xl-3 col-md-6 mb-4">
             <div class="card shadow h-100 py-2"
-                style="background: linear-gradient(135deg,#4361ee,#6e8bff); border-radius:12px;">
+                style="background: linear-gradient(135deg,#ff6b6b,#ff8fab); border-radius:12px;">
                 <div class="card-body text-white">
                     <div class="row no-gutters align-items-center">
                         <div class="col mr-2">
@@ -145,7 +144,7 @@
             datasets: [{
                 label: 'Jumlah (Rp)',
                 data: [{{ $totalPemasukan }}, {{ $totalPengeluaran }}, {{ $saldoAkhir }}],
-                backgroundColor: ['#4e73df', '#e74a3b', '#f6c23e'],
+                backgroundColor: ['#4e73df', '#e74a3b', '#06d6a0'],
                 borderRadius: 8
             }]
         },
