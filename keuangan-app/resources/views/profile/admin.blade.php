@@ -17,9 +17,19 @@
 
             {{-- FOTO PROFIL --}}
             <div class="text-center mb-5">
-                <img src="https://ui-avatars.com/api/?name={{ urlencode(auth()->user()->name) }}&background=007bff&color=fff&size=120"
-                    alt="Avatar"
-                    class="rounded-circle shadow mb-3" width="120" height="120">
+                @if(auth()->user()->photo)
+    <img src="{{ asset('storage/' . auth()->user()->photo) }}"
+         alt="Foto Profil"
+         class="rounded-circle shadow mb-3"
+         width="120" height="120"
+         style="object-fit: cover;">
+@else
+    <img src="{{ asset('sb-admin2/img/admin.png') }}"
+         alt="Default Avatar"
+         class="rounded-circle shadow mb-3"
+         width="120" height="120"
+         style="object-fit: cover;">
+@endif
                 <h5 class="fw-bold text-primary">{{ auth()->user()->name }}</h5>
                 <p class="text-muted small mb-0">{{ auth()->user()->email }}</p>
                 <hr class="mt-4 mb-5">

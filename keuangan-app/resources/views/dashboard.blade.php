@@ -18,27 +18,23 @@
         transition: all 0.25s ease-in-out;
         box-shadow: 0 6px 20px rgba(0, 0, 0, 0.15);
     }
-</style>
 
-<style>
     .form-select:focus {
         box-shadow: 0 0 6px rgba(0,0,0,0.25) !important;
         outline: none;
         border-color: #fff;
     }
+
     .form-select option {
         color: #000;
     }
 </style>
 
-
 <!-- ================== FILTER TAHUN & BULAN ================== -->
 <div class="row mb-3">
     <div class="col-md-4">
         <form method="GET" action="{{ route('dashboard') }}">
-            <div class="input-group" style="gap: 4px;"> <!-- jarak minimal antar dropdown -->
-                
-                <!-- Tahun -->
+            <div class="input-group" style="gap: 4px;"> 
                 <select name="year" class="form-select form-select-sm fw-bold"
                     onchange="this.form.submit()"
                     style="background: linear-gradient(135deg,#4361ee,#6e8bff); color:#fff; border-radius:8px; border:none; height:38px; box-shadow: 0 2px 6px rgba(0,0,0,0.15);">
@@ -49,7 +45,6 @@
                     @endfor
                 </select>
 
-                <!-- Bulan -->
                 <select name="month" class="form-select form-select-sm fw-bold"
                     onchange="this.form.submit()"
                     style="background: linear-gradient(135deg,#ff6b6b,#ff8fab); color:#fff; border-radius:8px; border:none; height:38px; box-shadow: 0 2px 6px rgba(0,0,0,0.15);">
@@ -60,12 +55,10 @@
                         </option>
                     @endforeach
                 </select>
-
             </div>
         </form>
     </div>
 </div>
-
 
 <!-- ================== SUMMARY CARDS ================== -->
 <div class="row">
@@ -170,18 +163,17 @@
                             </div>
                             <small class="text-muted">{{ $row['pengeluaran_persen'] }}%</small>
                         </td>
-<td>
-    @if($row['status'] === 'Naik')
-        <span class="badge bg-success"><i class="fas fa-arrow-up"></i> Naik</span>
-    @elseif($row['status'] === 'Turun')
-        <span class="badge bg-danger"><i class="fas fa-arrow-down"></i> Turun</span>
-    @else
-        <span class="badge" style="background-color:#e2e3e5; color:#495057;">
-            <i class="fas fa-minus"></i> Stabil
-        </span>
-    @endif
-</td>
-
+                        <td>
+                            @if($row['status'] === 'Naik')
+                                <span class="badge bg-success"><i class="fas fa-arrow-up"></i> Naik</span>
+                            @elseif($row['status'] === 'Turun')
+                                <span class="badge bg-danger"><i class="fas fa-arrow-down"></i> Turun</span>
+                            @else
+                                <span class="badge" style="background-color:#e2e3e5; color:#495057;">
+                                    <i class="fas fa-minus"></i> Stabil
+                                </span>
+                            @endif
+                        </td>
                     </tr>
                     @endforeach
                 </tbody>
