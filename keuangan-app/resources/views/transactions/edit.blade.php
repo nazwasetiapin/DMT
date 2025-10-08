@@ -83,16 +83,23 @@
               </div>
             </div>
 
-            <!-- Tanggal -->
+           <!-- Tanggal -->
             <div class="form-row">
               <div class="form-group col-md-12">
                 <label><i class="fas fa-calendar-day mr-1 text-danger"></i> Tanggal</label>
-                <input type="date" name="tanggal" id="tanggal"
-                  class="form-control shadow-sm @error('tanggal') is-invalid @enderror"
-                  value="{{ old('tanggal', \Carbon\Carbon::parse($transaction->tanggal)->format('Y-m-d')) }}" required>
-                @error('tanggal')
-                  <div class="invalid-feedback">{{ $message }}</div>
-                @enderror
+                <div class="input-group">
+                  <input type="date" name="tanggal" id="tanggal"
+                    class="form-control shadow-sm @error('tanggal') is-invalid @enderror"
+                    value="{{ old('tanggal', isset($trx) ? $trx->tanggal->format('Y-m-d') : '') }}" required>
+                  <div class="input-group-append">
+                    <button type="button" id="todayBtn" class="btn btn-outline-primary shadow-sm">
+                      <i class="fas fa-clock mr-1"></i> Hari Ini
+                    </button>
+                  </div>
+                  @error('tanggal')
+                    <div class="invalid-feedback d-block">{{ $message }}</div>
+                  @enderror
+                </div>
               </div>
             </div>
 
@@ -125,28 +132,55 @@
 
 @push('scripts')
   <script>
-    document.getElementById('category_id').addEventListener('change', function () {
-      let categoryId = this.value;
-      let subCategorySelect = document.getElementById('sub_category_id');
+    /**
+     * ===============================
+     *  Tombol "Hari Ini" → Isi otomatis tanggal hari ini
+     * ===============================
+     */
+    document.getElementById('todayBtn').addEventListener('click', function () {
+      const today = new Date(); // Ambil tanggal hari ini dari sistem
+      const formatted = today.toISOString().split('T')[0]; // Format ke YYYY-MM-DD
+      document.getElementById('tanggal').value = formatted; // Set nilai input tanggal
+    });
 
+    /**
+     * ===============================
+     *  Dropdown Dinamis: Kategori → Sub Kategori
+     *  Ketika kategori dipilih, sistem akan memuat daftar sub kategori
+     *  melalui request ke endpoint: /get-subcategories/{categoryId}
+     * ===============================
+     */
+    document.getElementById('category_id').addEventListener('change', function () {
+      let categoryId = this.value; // Ambil ID kategori yang dipilih
+      let subCategorySelect = document.getElementById('sub_category_id'); // Elemen dropdown sub kategori
+
+      // Tampilkan pesan loading sementara
       subCategorySelect.innerHTML = '<option value="">Memuat data...</option>';
 
+      // Jika kategori dipilih (tidak kosong)
       if (categoryId) {
+        // Ambil data sub kategori dari server (Laravel route)
         fetch(`/get-subcategories/${categoryId}`)
-          .then(response => response.json())
+          .then(response => response.json()) // Ubah response ke JSON
           .then(data => {
+            // Reset isi dropdown dengan opsi awal
             subCategorySelect.innerHTML = '<option value="">-- Pilih Jenis Transaksi --</option>';
+
+            // Loop setiap sub kategori dari response
             data.forEach(sub => {
               let option = document.createElement('option');
-              option.value = sub.id;
-              option.textContent = sub.name;
-              subCategorySelect.appendChild(option);
+              option.value = sub.id;     // ID sub kategori
+              option.textContent = sub.name; // Nama sub kategori
+              subCategorySelect.appendChild(option); // Tambahkan ke dropdown
             });
           })
           .catch(() => {
+            // Jika error saat fetch (misalnya koneksi gagal)
             subCategorySelect.innerHTML = '<option value="">Gagal memuat data</option>';
           });
+
       } else {
+        // Jika kategori dihapus atau belum dipilih
         subCategorySelect.innerHTML = '<option value="">-- Pilih Jenis Transaksi --</option>';
       }
     });
