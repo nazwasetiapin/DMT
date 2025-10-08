@@ -138,18 +138,22 @@
 
                   @if($role === 'admin')
                     <td>
-                      <a href="{{ route('transactions.edit', $trx->id) }}" class="btn btn-sm btn-warning shadow-sm mr-1"
-                        data-toggle="tooltip" title="Edit">
+                      <a href="{{ route('transactions.edit', $trx->id) }}" class="btn btn-warning btn-sm rounded-circle"
+                        data-bs-toggle="tooltip" title="Edit">
                         <i class="fas fa-edit"></i>
                       </a>
-                      <form action="{{ route('transactions.destroy', $trx->id) }}" method="POST" class="d-inline">
-                        @csrf @method('DELETE')
-                        <button class="btn btn-sm btn-danger shadow-sm" onclick="return confirm('Hapus transaksi ini?')"
-                          data-toggle="tooltip" title="Hapus">
+
+                      <form id="delete-form-{{ $trx->id }}" action="{{ route('transactions.destroy', $trx->id) }}"
+                        method="POST" class="d-inline">
+                        @csrf
+                        @method('DELETE')
+                        <button type="button" onclick="confirmDelete({{ $trx->id }})"
+                          class="btn btn-danger btn-sm rounded-circle" data-bs-toggle="tooltip" title="Hapus">
                           <i class="fas fa-trash"></i>
                         </button>
                       </form>
                     </td>
+
                   @endif
                 </tr>
               @empty
