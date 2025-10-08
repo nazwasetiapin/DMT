@@ -20,19 +20,44 @@ class TransactionController extends Controller
         if (request()->filled('month')) {
             $query->whereMonth('tanggal', request('month'));
         }
-
+        // filter bedasarkan tahun
         if (request()->filled('year')) {
             $query->whereYear('tanggal', request('year'));
         }
+        // 🔹 Filter berdasarkan type_id (Pemasukan / Pengeluaran)
+        if (request()->filled('type_id')) {
+            $query->where('type_id', request('type_id'));
+        }
 
+        // ambil semua data seteah di filter
         $transactions = $query->get();
 
-        // Hitung total pemasukan & pengeluaran (berdasarkan filter juga)
+        /**
+         * =============================
+         * Perhitungan Total
+         * =============================
+         */
+
+        // Ambil ID jenis transaksi dari tabel Type
         $pemasukanId = Type::where('name', 'Pemasukan')->value('id');
         $pengeluaranId = Type::where('name', 'Pengeluaran')->value('id');
 
-        $totalPemasukan = $pemasukanId ? $query->clone()->where('type_id', $pemasukanId)->sum('amount') : 0;
-        $totalPengeluaran = $pengeluaranId ? $query->clone()->where('type_id', $pengeluaranId)->sum('amount') : 0;
+        $totalPemasukan = $pemasukanId
+            ? (clone $query)->where('type_id', $pemasukanId)->sum('amount')
+            : 0;
+
+        $totalPengeluaran = $pengeluaranId
+            ? (clone $query)->where('type_id', $pengeluaranId)->sum('amount')
+            : 0;
+
+        // Hitung saldo (pemasukan dikurangi pengeluaran)
+        $saldo = $totalPemasukan - $totalPengeluaran;
+
+        /**
+         * =============================
+         * untuk tampilan
+         * =============================
+         */
 
         // Ambil daftar tahun untuk dropdown filter
         $years = Transaction::selectRaw('YEAR(tanggal) as year')
@@ -49,16 +74,17 @@ class TransactionController extends Controller
 
         $role = auth()->user()->role;
 
+        // Kirim juga saldo ke view
         return view('transactions.index', compact(
             'transactions',
             'totalPemasukan',
             'totalPengeluaran',
+            'saldo', 
             'role',
             'monthlySums',
             'years'
         ));
     }
-
 
 
     public function create()
