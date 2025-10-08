@@ -12,79 +12,85 @@ use Illuminate\Http\Request;
 
 class TransactionController extends Controller
 {
-    public function index()
-    {
-        $query = Transaction::with(['type', 'category', 'subCategory'])->latest();
+   public function index()
+{
+    $query = Transaction::with(['type', 'category', 'subCategory'])->latest();
 
-        // Tambahkan filter jika ada input bulan & tahun
-        if (request()->filled('month')) {
-            $query->whereMonth('tanggal', request('month'));
-        }
-        // filter bedasarkan tahun
-        if (request()->filled('year')) {
-            $query->whereYear('tanggal', request('year'));
-        }
-        // 🔹 Filter berdasarkan type_id (Pemasukan / Pengeluaran)
-        if (request()->filled('type_id')) {
-            $query->where('type_id', request('type_id'));
-        }
-
-        // ambil semua data seteah di filter
-        $transactions = $query->get();
-
-        /**
-         * =============================
-         * Perhitungan Total
-         * =============================
-         */
-
-        // Ambil ID jenis transaksi dari tabel Type
-        $pemasukanId = Type::where('name', 'Pemasukan')->value('id');
-        $pengeluaranId = Type::where('name', 'Pengeluaran')->value('id');
-
-        $totalPemasukan = $pemasukanId
-            ? (clone $query)->where('type_id', $pemasukanId)->sum('amount')
-            : 0;
-
-        $totalPengeluaran = $pengeluaranId
-            ? (clone $query)->where('type_id', $pengeluaranId)->sum('amount')
-            : 0;
-
-        // Hitung saldo (pemasukan dikurangi pengeluaran)
-        $saldo = $totalPemasukan - $totalPengeluaran;
-
-        /**
-         * =============================
-         * untuk tampilan
-         * =============================
-         */
-
-        // Ambil daftar tahun untuk dropdown filter
-        $years = Transaction::selectRaw('YEAR(tanggal) as year')
-            ->groupBy('year')
-            ->orderBy('year', 'desc')
-            ->pluck('year');
-
-        // Ringkasan per bulan & tahun (tidak dipengaruhi filter)
-        $monthlySums = Transaction::selectRaw('YEAR(tanggal) as year, MONTH(tanggal) as month, SUM(amount) as total')
-            ->groupBy('year', 'month')
-            ->orderBy('year', 'desc')
-            ->orderBy('month', 'desc')
-            ->get();
-
-        $role = auth()->user()->role;
-
-        // Kirim juga saldo ke view
-        return view('transactions.index', compact(
-            'transactions',
-            'totalPemasukan',
-            'totalPengeluaran',
-            'saldo', 
-            'role',
-            'monthlySums',
-            'years'
-        ));
+    // 🔹 Filter berdasarkan bulan
+    if (request()->filled('month')) {
+        $query->whereMonth('tanggal', request('month'));
     }
+
+    // 🔹 Filter berdasarkan tahun
+    if (request()->filled('year')) {
+        $query->whereYear('tanggal', request('year'));
+    }
+
+    // 🔹 Filter berdasarkan tipe (Pemasukan / Pengeluaran)
+    if (request()->filled('type_id')) {
+        $query->where('type_id', request('type_id'));
+    }
+
+    // Ambil hasil filter (untuk perhitungan)
+    $filteredQuery = clone $query;
+
+    /**
+     * =============================
+     * Perhitungan Total
+     * =============================
+     */
+    $pemasukanId = Type::where('name', 'Pemasukan')->value('id');
+    $pengeluaranId = Type::where('name', 'Pengeluaran')->value('id');
+
+    $totalPemasukan = $pemasukanId
+        ? (clone $filteredQuery)->where('type_id', $pemasukanId)->sum('amount')
+        : 0;
+
+    $totalPengeluaran = $pengeluaranId
+        ? (clone $filteredQuery)->where('type_id', $pengeluaranId)->sum('amount')
+        : 0;
+
+    // Hitung saldo akhir
+    $saldo = $totalPemasukan - $totalPengeluaran;
+
+    /**
+     * =============================
+     * Untuk tampilan
+     * =============================
+     */
+    $years = Transaction::selectRaw('YEAR(tanggal) as year')
+        ->groupBy('year')
+        ->orderBy('year', 'desc')
+        ->pluck('year');
+
+    $monthlySums = Transaction::selectRaw('YEAR(tanggal) as year, MONTH(tanggal) as month, SUM(amount) as total')
+        ->groupBy('year', 'month')
+        ->orderBy('year', 'desc')
+        ->orderBy('month', 'desc')
+        ->get();
+
+    $role = auth()->user()->role;
+
+    // 🔹 Tambahkan ini — ambil data untuk dropdown filter
+    $types = Type::all();
+    $categories = Category::all();
+
+    // 🔹 Pagination tetap aktif (8 data per halaman)
+    $transactions = $query->paginate(8);
+
+    // 🔹 Kirim semua data ke view
+    return view('transactions.index', compact(
+        'transactions',
+        'totalPemasukan',
+        'totalPengeluaran',
+        'saldo',
+        'role',
+        'monthlySums',
+        'years',
+        'types',
+        'categories'
+    ));
+}
 
 
     public function create()

@@ -8,6 +8,7 @@ use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\SubCategoryController;
 use App\Http\Controllers\TransactionController;
 use App\Http\Controllers\ReportController;
+use App\Http\Controllers\ReportIndexController;
 
 
 Route::get('/dashboard', [DashboardController::class, 'index'])
@@ -64,5 +65,11 @@ Route::get('/get-subcategories/{category_id}', [SubCategoryController::class, 'g
 Route::middleware(['auth'])->group(function () {
     Route::get('/report/generate', [ReportController::class, 'generate'])->name('report.generate');
 });
+
+
+// generate laporan pdf index
+Route::get('/report/transactions', [ReportIndexController::class, 'generate'])
+    ->name('report.index.generate');
+
 
 require __DIR__.'/auth.php';

@@ -23,8 +23,10 @@
             <i class="fas fa-list mr-2"></i> Daftar Transaksi
           </h4>
 
+
+
           {{-- Filter bulan, tahun, dan jenis transaksi --}}
-          <form method="GET" action="{{ route('transactions.index') }}" class="form-inline">
+          <form method="GET" action="{{ route('transactions.index') }}" class="form-inline" id="filterForm">
 
             {{-- Filter bulan --}}
             <select name="month" class="form-control form-control-sm mr-2 shadow-sm">
@@ -60,8 +62,13 @@
             </button>
 
             {{-- Tombol reset --}}
-            <a href="{{ route('transactions.index') }}" class="btn btn-sm btn-secondary shadow-sm">
+            <a href="{{ route('transactions.index') }}" class="btn btn-sm btn-secondary shadow-sm mr-2">
               <i class="fas fa-undo mr-1"></i> Reset
+            </a>
+
+            {{-- Tombol Generate Report (PDF) --}}
+            <a href="#" id="generateReportBtn" class="btn btn-sm btn-primary shadow-sm">
+              <i class="fas fa-download fa-sm text-white-50"></i> Generate Report
             </a>
 
           </form>
@@ -92,6 +99,7 @@
         </div>
 
 
+
         <div class="table-responsive">
           <table class="table table-hover table-striped table-borderless align-middle text-center">
             <thead class="thead-light">
@@ -104,14 +112,15 @@
                 <th>Tanggal</th>
                 <th>Deskripsi</th>
                 @if($role === 'admin')
-                  <th>Aksi</th>
+                  <th>Action</th>
                 @endif
               </tr>
             </thead>
             <tbody>
               @forelse($transactions as $index => $trx)
                 <tr>
-                  <td>{{ $index + 1 }}</td>
+                  <!-- nomor berurutan -->
+                  <td>{{ $transactions->firstItem() + $index }}</td>
                   <td>
                     @if($trx->type->name == 'Pemasukan')
                       <span class="badge badge-success px-2 py-1">
@@ -137,18 +146,22 @@
 
                   @if($role === 'admin')
                     <td>
-                      <a href="{{ route('transactions.edit', $trx->id) }}" class="btn btn-sm btn-warning shadow-sm mr-1"
-                        data-toggle="tooltip" title="Edit">
+                      <a href="{{ route('transactions.edit', $trx->id) }}" class="btn btn-warning btn-sm rounded-circle"
+                        data-bs-toggle="tooltip" title="Edit">
                         <i class="fas fa-edit"></i>
                       </a>
-                      <form action="{{ route('transactions.destroy', $trx->id) }}" method="POST" class="d-inline">
-                        @csrf @method('DELETE')
-                        <button class="btn btn-sm btn-danger shadow-sm" onclick="return confirm('Hapus transaksi ini?')"
-                          data-toggle="tooltip" title="Hapus">
+
+                      <form id="delete-form-{{ $trx->id }}" action="{{ route('transactions.destroy', $trx->id) }}"
+                        method="POST" class="d-inline">
+                        @csrf
+                        @method('DELETE')
+                        <button type="button" onclick="confirmDelete({{ $trx->id }})"
+                          class="btn btn-danger btn-sm rounded-circle" data-bs-toggle="tooltip" title="Hapus">
                           <i class="fas fa-trash"></i>
                         </button>
                       </form>
                     </td>
+
                   @endif
                 </tr>
               @empty
@@ -160,9 +173,36 @@
               @endforelse
             </tbody>
           </table>
+
+          <div class="d-flex justify-content-center mt-4 mb-2">
+            {{ $transactions->links() }}
+          </div>
+
         </div>
       </div>
     </div>
   </div>
   </div>
 @endsection
+
+@push('scripts')
+  <script>
+    // Saat tombol "Generate Report" diklik
+    document.getElementById('generateReportBtn').addEventListener('click', function (e) {
+      e.preventDefault();
+
+      // Ambil form filter
+      const form = document.getElementById('filterForm');
+      if (!form) {
+        alert('Form filter tidak ditemukan di halaman.');
+        return;
+      }
+
+      // Buat query string dari input form
+      const params = new URLSearchParams(new FormData(form)).toString();
+
+      // Buka halaman generate report di tab baru dengan filter yang sama
+      window.open(`{{ route('report.index.generate') }}?${params}`, '_blank');
+    });
+  </script>
+@endpush
