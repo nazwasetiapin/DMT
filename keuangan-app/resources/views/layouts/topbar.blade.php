@@ -54,20 +54,20 @@
     <div class="topbar-divider d-none d-sm-block"></div>
 
     <!-- User Info -->
-    <li class="nav-item dropdown no-arrow">
-      <a class="nav-link dropdown-toggle d-flex align-items-center" href="#" id="userDropdown" role="button" data-toggle="dropdown"
-        aria-haspopup="true" aria-expanded="false">
-        
-        <!-- Foto Profil -->
-        <img class="img-profile rounded-circle mr-2" 
-             src="{{ $user->photo ? asset('storage/' . $user->photo) : asset('./sb-admin2/img/admin.png') }}" 
-             style="width: 35px; height: 35px; object-fit: cover;">
+<li class="nav-item dropdown no-arrow">
+  <a class="nav-link dropdown-toggle d-flex align-items-center" href="#" id="userDropdown" role="button" data-toggle="dropdown"
+    aria-haspopup="true" aria-expanded="false">
 
-        <!-- Nama User -->
-        <span class="mr-2 d-none d-lg-inline text-gray-600 small">
-          {{ $user->name }}
-        </span>
-      </a>
+    <!-- Nama User (dipindah ke kiri) -->
+    <span class="mr-2 d-none d-lg-inline text-black-500 small">
+      {{ $user->role ? ($user->role === 'ceo' ? 'CEO' : ucfirst($user->role)) : $user->name }}
+    </span>
+
+    <!-- Foto Profil -->
+    <img class="img-profile rounded-circle ml-2" 
+         src="{{ $user->photo ? asset('storage/' . $user->photo) : asset('./sb-admin2/img/admin.png') }}" 
+         style="width: 35px; height: 35px; object-fit: cover;">
+  </a>
 
       <div class="dropdown-menu dropdown-menu-right shadow animated--fade-in" aria-labelledby="userDropdown">
         <a class="dropdown-item" href="{{ url('profile') }}">
