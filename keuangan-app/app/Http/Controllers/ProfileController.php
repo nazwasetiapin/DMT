@@ -2,17 +2,16 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Requests\ProfileUpdateRequest;
-use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Redirect;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\View\View;
 
 class ProfileController extends Controller
 {
     /**
-     * Display the user's profile form.
+     * Menampilkan halaman profil.
      */
     public function edit(Request $request): View
     {
@@ -28,27 +27,43 @@ class ProfileController extends Controller
     }
 
     /**
-     * Update the user's profile information.
+     * Update data profil user.
      */
-    public function update(ProfileUpdateRequest $request): RedirectResponse
+    public function update(Request $request)
     {
-        $user = $request->user();
-        $user->fill($request->validated());
+        $user = auth()->user();
 
-        // Reset verifikasi email jika diubah
-        if ($user->isDirty('email')) {
-            $user->email_verified_at = null;
+        $request->validate([
+            'username' => 'required|string|max:255',
+            'photo' => 'nullable|image|mimes:jpg,jpeg,png|max:2048',
+        ]);
+
+        // Update nama
+        $user->username = $request->username;
+
+        // Update foto kalau ada
+        if ($request->hasFile('photo')) {
+            // Hapus foto lama (kalau ada)
+            if ($user->photo && Storage::exists('public/' . $user->photo)) {
+                Storage::delete('public/' . $user->photo);
+            }
+
+            // Simpan foto baru
+            $path = $request->file('photo')->store('photos', 'public');
+            $user->photo = $path;
         }
 
         $user->save();
 
-        return Redirect::route('profile.edit')->with('status', 'profile-updated');
+        auth()->setUser($user);
+
+        return back()->with('success', 'Profil berhasil diperbarui!');
     }
 
     /**
-     * Delete the user's account.
+     * Hapus akun user.
      */
-    public function destroy(Request $request): RedirectResponse
+    public function destroy(Request $request)
     {
         $request->validateWithBag('userDeletion', [
             'password' => ['required', 'current_password'],
