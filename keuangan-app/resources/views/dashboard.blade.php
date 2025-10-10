@@ -7,9 +7,6 @@
     <h1 class="h2 fw-bold text-primary">
         <i class="fas fa-tachometer-alt me-2"></i> Dashboard
     </h1>
-    <a href="{{ route('report.generate') }}" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm">
-        <i class="fas fa-download fa-sm text-white-50"></i> Generate Report
-    </a>
 </div>
 
 <style>
