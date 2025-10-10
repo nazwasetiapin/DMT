@@ -75,8 +75,8 @@ class TransactionController extends Controller
     $types = Type::all();
     $categories = Category::all();
 
-    // 🔹 Pagination tetap aktif (8 data per halaman)
-    $transactions = $query->paginate(8);
+     // ✅ Pagination + simpan query filter
+    $transactions = $query->paginate(8)->appends(request()->all());
 
     // 🔹 Kirim semua data ke view
     return view('transactions.index', compact(
