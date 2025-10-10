@@ -19,6 +19,7 @@ class User extends Authenticatable
         'username',
         'password',
         'role', // admin atau ceo
+        'photo',
     ];
 
     /**
@@ -33,21 +34,31 @@ class User extends Authenticatable
      * Casting kolom.
      */
     protected $casts = [
+        // pakai 'hashed' biar otomatis hash saat update password
         'password' => 'hashed',
     ];
 
-     public function getAuthIdentifierName()
+    /**
+     * Gunakan kolom `username` untuk login, bukan `email`.
+     */
+    public function getAuthIdentifierName()
     {
         return 'username';
     }
 
     /**
-     * Setter otomatis untuk password (langsung di-hash).
+     * Setter otomatis untuk password (hash manual).
+     * Catatan: ini optional karena sudah ada 'hashed' di $casts.
      */
     public function setPasswordAttribute($value)
     {
         if (!empty($value)) {
-            $this->attributes['password'] = Hash::make($value);
+            // Jika sudah di-hash (misal dari seeder), jangan di-hash ulang
+            if (!Hash::info($value)['algo']) {
+                $this->attributes['password'] = Hash::make($value);
+            } else {
+                $this->attributes['password'] = $value;
+            }
         }
     }
 
