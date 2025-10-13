@@ -1,0 +1,78 @@
+
+                   SSUUMMMMAARRYY OOFF LLEESSSS CCOOMMMMAANNDDSS
+
+      Commands marked with * may be preceded by a number, _N.
+      Notes in parentheses indicate the behavior if _N is given.
+      A key preceded by a caret indicates the Ctrl key; thus ^K is ctrl-K.
+
+  h  H                 Display this help.
+  q  :q  Q  :Q  ZZ     Exit.
+ ---------------------------------------------------------------------------
+
+                           MMOOVVIINNGG
+
+[33m9b35126[m[33m ([m[1;36mHEAD[m[33m -> [m[1;32mmain[m[33m, [m[1;31morigin/main[m[33m, [m[1;31morigin/HEAD[m[33m, [m[1;32mSatrio[m[33m)[m HEAD@{0}: checkout: moving from Satrio to main
+[33m9b35126[m[33m ([m[1;36mHEAD[m[33m -> [m[1;32mmain[m[33m, [m[1;31morigin/main[m[33m, [m[1;31morigin/HEAD[m[33m, [m[1;32mSatrio[m[33m)[m HEAD@{1}: checkout: moving from main to Satrio
+[33m9b35126[m[33m ([m[1;36mHEAD[m[33m -> [m[1;32mmain[m[33m, [m[1;31morigin/main[m[33m, [m[1;31morigin/HEAD[m[33m, [m[1;32mSatrio[m[33m)[m HEAD@{2}: reset: moving to origin/main
+[33m98d9d09[m HEAD@{3}: checkout: moving from Satrio to main
+[33m9b35126[m[33m ([m[1;36mHEAD[m[33m -> [m[1;32mmain[m[33m, [m[1;31morigin/main[m[33m, [m[1;31morigin/HEAD[m[33m, [m[1;32mSatrio[m[33m)[m HEAD@{4}: reset: moving to origin/main
+[33m9b35126[m[33m ([m[1;36mHEAD[m[33m -> [m[1;32mmain[m[33m, [m[1;31morigin/main[m[33m, [m[1;31morigin/HEAD[m[33m, [m[1;32mSatrio[m[33m)[m HEAD@{5}: checkout: moving from main to Satrio
+[33m98d9d09[m HEAD@{6}: checkout: moving from Satrio to main
+[33m9b35126[m[33m ([m[1;36mHEAD[m[33m -> [m[1;32mmain[m[33m, [m[1;31morigin/main[m[33m, [m[1;31morigin/HEAD[m[33m, [m[1;32mSatrio[m[33m)[m HEAD@{7}: merge origin/main: Fast-forward
+[33m68600c0[m[33m ([m[1;31morigin/Satrio[m[33m)[m HEAD@{8}: checkout: moving from main to Satrio
+[33m98d9d09[m HEAD@{9}: checkout: moving from Satrio to main
+[33m68600c0[m[33m ([m[1;31morigin/Satrio[m[33m)[m HEAD@{10}: commit: commit
+[33mba4cf94[m HEAD@{11}: commit: menambahkan icon dll
+[33m98d9d09[m HEAD@{12}: merge origin/main: Fast-forward
+[33mdb1973e[m HEAD@{13}: checkout: moving from main to Satrio
+[33m98d9d09[m HEAD@{14}: pull: Fast-forward
+[33m17dcf78[m HEAD@{15}: checkout: moving from Satrio to main
+[33mdb1973e[m HEAD@{16}: reset: moving to HEAD
+[33mdb1973e[m HEAD@{17}: checkout: moving from main to Satrio
+[33m17dcf78[m HEAD@{18}: reset: moving to HEAD
+[33m17dcf78[m HEAD@{19}: checkout: moving from Satrio to main
+[33mdb1973e[m HEAD@{20}: checkout: moving from main to Satrio
+[33m17dcf78[m HEAD@{21}: reset: moving to HEAD
+[33m17dcf78[m HEAD@{22}: pull: Fast-forward
+[33mb1c5124[m HEAD@{23}: pull: Fast-forward
+[33m6c97df2[m HEAD@{24}: checkout: moving from Satrio to main
+[33mdb1973e[m HEAD@{25}: commit (merge): Update halaman home
+[33mb7c19e3[m HEAD@{26}: commit: Update halaman home
+[33m0603ac9[m HEAD@{27}: checkout: moving from satrio to Satrio
+[33m0603ac9[m HEAD@{28}: checkout: moving from main to satrio
+[33m6c97df2[m HEAD@{29}: checkout: moving from satrio to main
+[33m0603ac9[m HEAD@{30}: pull origin satrio --rebase (finish): returning to refs/heads/satrio
+[33m0603ac9[m HEAD@{31}: pull origin satrio --rebase (pick): merubah home
+[33m2457bd8[m HEAD@{32}: pull origin satrio --rebase (pick): Restore file yang hilang dari branch nazwa
+[33mff82cc2[m HEAD@{33}: pull origin satrio --rebase (pick): memperbaiki
+[33m075c1cc[m HEAD@{34}: pull origin satrio --rebase (start): checkout 075c1cc5c9e0f67f936ee2a2344c8f93744a9d91
+[33m43e6d94[m HEAD@{35}: commit: merubah home
+[33m6c97df2[m HEAD@{36}: pull origin main: Fast-forward
+[33mb0d30ef[m HEAD@{37}: checkout: moving from main to satrio
+[33m6c97df2[m HEAD@{38}: checkout: moving from Satrio to main
+[33mb0d30ef[m HEAD@{39}: checkout: moving from main to Satrio
+[33m6c97df2[m HEAD@{40}: pull: Fast-forward
+[33mccf1dc8[m HEAD@{41}: checkout: moving from satrio to main
+[33mb0d30ef[m HEAD@{42}: checkout: moving from Nissa to satrio
+[33m0864a77[m[33m ([m[1;32mNissa[m[33m)[m HEAD@{43}: checkout: moving from satrio to Nissa
+[33mb0d30ef[m HEAD@{44}: pull origin main: Fast-forward
+[33m87192c9[m HEAD@{45}: checkout: moving from main to satrio
+[33mccf1dc8[m HEAD@{46}: pull: Fast-forward
+[33mf6df820[m HEAD@{47}: checkout: moving from Satrio to main
+[33m87192c9[m HEAD@{48}: commit: update halaman home
+[33m4ac0916[m HEAD@{49}: checkout: moving from Satrio to Satrio
+[33m4ac0916[m HEAD@{50}: checkout: moving from main to Satrio
+[33mf6df820[m HEAD@{51}: reset: moving to HEAD
+[33mf6df820[m HEAD@{52}: pull: Fast-forward
+[33mddaab47[m HEAD@{53}: checkout: moving from Satrio to main
+[33m4ac0916[m HEAD@{54}: checkout: moving from main to Satrio
+[33mddaab47[m HEAD@{55}: pull: Fast-forward
+[33me0a3c8d[m[33m ([m[1;32mtemplate_sbadmin[m[33m, [m[1;32mhalaman_pengeluaran[m[33m)[m HEAD@{56}: checkout: moving from Satrio to main
+[33m4ac0916[m HEAD@{57}: commit: Menambahkan halaman login
+[33m933ff83[m[33m ([m[1;31morigin/template_sbadmin2[m[33m, [m[1;32mtemplate_sbadmin2[m[33m)[m HEAD@{58}: checkout: moving from template_sbadmin2 to Satrio
+[33m933ff83[m[33m ([m[1;31morigin/template_sbadmin2[m[33m, [m[1;32mtemplate_sbadmin2[m[33m)[m HEAD@{59}: commit: menambahkan templatea sbadmin
+[33me0a3c8d[m[33m ([m[1;32mtemplate_sbadmin[m[33m, [m[1;32mhalaman_pengeluaran[m[33m)[m HEAD@{60}: checkout: moving from template_sbadmin to template_sbadmin2
+[33me0a3c8d[m[33m ([m[1;32mtemplate_sbadmin[m[33m, [m[1;32mhalaman_pengeluaran[m[33m)[m HEAD@{61}: checkout: moving from template_sbadmin to template_sbadmin
+[33me0a3c8d[m[33m ([m[1;32mtemplate_sbadmin[m[33m, [m[1;32mhalaman_pengeluaran[m[33m)[m HEAD@{62}: checkout: moving from halaman_pengeluaran to template_sbadmin
+[33me0a3c8d[m[33m ([m[1;32mtemplate_sbadmin[m[33m, [m[1;32mhalaman_pengeluaran[m[33m)[m HEAD@{63}: checkout: moving from main to halaman_pengeluaran
+[33me0a3c8d[m[33m ([m[1;32mtemplate_sbadmin[m[33m, [m[1;32mhalaman_pengeluaran[m[33m)[m HEAD@{64}: clone: from https://github.com/nazwasetiapin/DMT.git
