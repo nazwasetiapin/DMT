@@ -12,21 +12,17 @@
   <!-- icon css fontawesome -->
 <link rel="icon" href="{{ asset('sb-admin2/img/favicon-new.png') }}" type="image/png">
 
-
-
-
-
-
-
 </head>
 
 <body id="page-top">
   <div id="wrapper">
+    <!-- menyisipkan file sidebar -->
     @include('layouts.sidebar')
     <div id="content-wrapper" class="d-flex flex-column">
       <div id="content">
         @include('layouts.topbar')
         <div class="container-fluid">
+          <!-- menampilkan isi halaman yang menggunakkan layout ini -->
           @yield('content')
         </div>
       

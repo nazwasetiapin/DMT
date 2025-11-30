@@ -10,6 +10,7 @@ class Transaction extends Model
     use HasFactory;
 
     protected $fillable = [
+        // nama-nama kolom yang di daftarkan sehingga bisa di simpan ke tabel
         'type_id',
         'category_id',
         'sub_category_id',
@@ -28,7 +29,8 @@ class Transaction extends Model
         return $this->belongsTo(Type::class);
     }
 
-    // Relasi ke Category
+    // Relasi ke many to one Category
+    // satu transaksi hanya memiliki 1, tetapi 1 category memiliki banyak transaksi
     public function category()
     {
         return $this->belongsTo(Category::class);
