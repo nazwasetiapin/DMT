@@ -39,6 +39,7 @@ class TransactionController extends Controller
      * Perhitungan Total
      * =============================
      */
+    // Cari data di tabel types (melalui model Type) yang kolom name-nya bernilai 'Pemasukan', lalu ambil nilai dari kolom id
     $pemasukanId = Type::where('name', 'Pemasukan')->value('id');
     $pengeluaranId = Type::where('name', 'Pengeluaran')->value('id');
 

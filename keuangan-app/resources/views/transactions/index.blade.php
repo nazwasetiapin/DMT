@@ -119,28 +119,40 @@
             <tbody>
               @forelse($transactions as $index => $trx)
                 <tr>
-                  <!-- nomor berurutan -->
+                  <!-- nomor berurutan di pagnation, jika next halaman no data tetap berurutan tidak kembali 1 -->
                   <td>{{ $transactions->firstItem() + $index }}</td>
                   <td>
+                    <!-- jika type namenya pemasukan  -->
                     @if($trx->type->name == 'Pemasukan')
+                    <!-- maka warna text hijau -->
                       <span class="badge badge-success px-2 py-1">
+                        <!-- dengan icon panah ke bawah -->
                         <i class="fas fa-arrow-down mr-1"></i> {{ $trx->type->name }}
                       </span>
+                      <!-- jika type name pengeluaran -->
                     @elseif($trx->type->name == 'Pengeluaran')
+                    <!-- maka warna text merah -->
                       <span class="badge badge-danger px-2 py-1">
+                        <!-- ikon tanda panah ke atas -->
                         <i class="fas fa-arrow-up mr-1"></i> {{ $trx->type->name }}
                       </span>
                     @else
+                    <!-- selain itu maka tulisan warna abu-abu tanpa ikon -->
                       <span class="badge badge-secondary px-2 py-1">
+                        <!-- karena type tidak di kenal/null -->
                         {{ $trx->type->name ?? '-' }}
                       </span>
                     @endif
                   </td>
+                  <!-- jika category kosong, maka akan tampil - -->
                   <td>{{ $trx->category->name ?? '-' }}</td>
                   <td>{{ $trx->subCategory->name ?? '-' }}</td>
+                  <!-- jika type name pemasukan maka text hijau selain itu text merah -->
                   <td class="{{ $trx->type->name == 'Pemasukan' ? 'text-success' : 'text-danger' }} font-weight-bold">
+                    <!-- membuat format angka menjadi tampilan ribuan -->
                     Rp {{ number_format($trx->amount, 0, ',', '.') }}
                   </td>
+                  <!-- mengubah string tanggal  -->
                   <td>{{ \Carbon\Carbon::parse($trx->tanggal)->format('d M Y') }}</td>
                   <td>{{ $trx->deskripsi ?? '-' }}</td>
 

@@ -179,8 +179,9 @@ h6 {
   color: var(--contrast-color);
 }
 
+/* jika layarnya lebih kecil dari ini  */
 @media (max-width: 575px) {
-
+/* maka munculkan kode dibawah */
   .header .topbar .contact-info i a,
   .header .topbar .contact-info i span {
     font-size: 13px;
