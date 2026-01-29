@@ -2,67 +2,48 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Requests\ProfileUpdateRequest;
-use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Redirect;
-use Illuminate\View\View;
+use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Storage;
 
 class ProfileController extends Controller
 {
-    /**
-     * Display the user's profile form.
-     */
-    public function edit(Request $request): View
+    public function index()
     {
-        $user = $request->user();
-
-        // 🔹 Beda tampilan berdasarkan role
-        if ($user->role === 'ceo') {
-            return view('profile.ceo', ['user' => $user]);
-        }
-
-        // 🔹 Default untuk admin
-        return view('profile.admin', ['user' => $user]);
+        return view('profile.index');
     }
 
-    /**
-     * Update the user's profile information.
-     */
-    public function update(ProfileUpdateRequest $request): RedirectResponse
+    public function update(Request $request)
     {
-        $user = $request->user();
-        $user->fill($request->validated());
+        $user = auth()->user();
 
-        // Reset verifikasi email jika diubah
-        if ($user->isDirty('email')) {
-            $user->email_verified_at = null;
-        }
-
-        $user->save();
-
-        return Redirect::route('profile.edit')->with('status', 'profile-updated');
-    }
-
-    /**
-     * Delete the user's account.
-     */
-    public function destroy(Request $request): RedirectResponse
-    {
-        $request->validateWithBag('userDeletion', [
-            'password' => ['required', 'current_password'],
+        $request->validate([
+            'username' => 'required|string|max:255|unique:users,username,' . $user->id,
+            'photo' => 'nullable|image|mimes:jpg,jpeg,png|max:2048',
         ]);
 
-        $user = $request->user();
+        // =====================
+        // UPDATE USERNAME
+        // =====================
+        $user->username = $request->username;
 
-        Auth::logout();
+        // =====================
+        // UPDATE FOTO
+        // =====================
+        if ($request->hasFile('photo')) {
 
-        $user->delete();
+            // hapus foto lama
+            if ($user->photo && Storage::disk('public')->exists($user->photo)) {
+                Storage::disk('public')->delete($user->photo);
+            }
 
-        $request->session()->invalidate();
-        $request->session()->regenerateToken();
+            $path = $request->file('photo')->store('profile', 'public');
+            $user->photo = $path;
+        }
 
-        return Redirect::to('/');
+        
+        $user->save();
+
+        return back()->with('success', 'Profil berhasil diperbarui');
     }
 }

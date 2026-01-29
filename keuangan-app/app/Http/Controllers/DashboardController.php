@@ -5,30 +5,46 @@ namespace App\Http\Controllers;
 use App\Models\Transaction;
 use App\Models\Type;
 use Illuminate\Http\Request;
-use Carbon\Carbon;
 
 class DashboardController extends Controller
 {
     public function index(Request $request)
     {
-        // Filter Tahun & Bulan
+        // =========================
+        // 🔹 Filter Tahun & Bulan
+        // =========================
         $year = $request->get('year', date('Y'));
-        $month = $request->get('month'); // Bisa null (seluruh bulan)
+        $month = $request->get('month'); // bisa null
 
-        // Ambil ID tipe Pemasukan & Pengeluaran (validasi null)
-        $pemasukanId = Type::where('name', 'Pemasukan')->value('id');
+        // =========================
+        // 🔹 Label Bulan (WAJIB ADA)
+        // =========================
+        $labels = ['Jan', 'Feb', 'Mar', 'Apr', 'Mei', 'Jun', 'Jul', 'Agu', 'Sep', 'Okt', 'Nov', 'Des'];
+
+        // =========================
+        // 🔹 Ambil ID Type
+        // =========================
+        $pemasukanId   = Type::where('name', 'Pemasukan')->value('id');
         $pengeluaranId = Type::where('name', 'Pengeluaran')->value('id');
 
-        if (!$pemasukanId || !$pengeluaranId) {
-            // Jika type tidak ditemukan, set default 0 untuk semua
-            $totalPemasukan = 0;
-            $totalPengeluaran = 0;
-            $dataPemasukan = array_fill(0, 12, 0);
-            $dataPengeluaran = array_fill(0, 12, 0);
-            $detailPersentase = [];
-        } else {
+        // =========================
+        // 🔹 DEFAULT VALUE (ANTI ERROR)
+        // =========================
+        $totalPemasukan   = 0;
+        $totalPengeluaran = 0;
+        $totalTransaksi   = 0;
+        $saldoAkhir       = 0;
+        $dataPemasukan    = array_fill(0, 12, 0);
+        $dataPengeluaran  = array_fill(0, 12, 0);
+        $detailPersentase = [];
+
+        // =========================
+        // 🔹 PROSES DATA JIKA TYPE ADA
+        // =========================
+        if ($pemasukanId && $pengeluaranId) {
+
             // =========================
-            // 🔹 Hitung Data Bulanan Sekali (Optimasi: Reuse untuk summary, grafik, dan detail)
+            // 🔹 Data Bulanan (Optimasi)
             // =========================
             $monthlyIncome = Transaction::where('type_id', $pemasukanId)
                 ->whereYear('tanggal', $year)
@@ -44,115 +60,66 @@ class DashboardController extends Controller
                 ->pluck('total', 'bulan')
                 ->toArray();
 
-            // Isi array 12 bulan dengan 0 jika tidak ada data
-            $dataPemasukan = [];
-            $dataPengeluaran = [];
             for ($m = 1; $m <= 12; $m++) {
-                $dataPemasukan[] = (float) ($monthlyIncome[$m] ?? 0);
+                $dataPemasukan[]   = (float) ($monthlyIncome[$m] ?? 0);
                 $dataPengeluaran[] = (float) ($monthlyExpense[$m] ?? 0);
             }
 
             // =========================
-            // 🔹 Summary Cards (Filter bulan jika dipilih)
+            // 🔹 Summary Cards
             // =========================
-            $totalPemasukanQuery = Transaction::where('type_id', $pemasukanId)
+            $pemasukanQuery = Transaction::where('type_id', $pemasukanId)
                 ->whereYear('tanggal', $year);
-            $totalPengeluaranQuery = Transaction::where('type_id', $pengeluaranId)
+
+            $pengeluaranQuery = Transaction::where('type_id', $pengeluaranId)
                 ->whereYear('tanggal', $year);
 
             if ($month) {
-                $totalPemasukanQuery->whereMonth('tanggal', $month);
-                $totalPengeluaranQuery->whereMonth('tanggal', $month);
+                $pemasukanQuery->whereMonth('tanggal', $month);
+                $pengeluaranQuery->whereMonth('tanggal', $month);
             }
 
-            $totalPemasukan = (float) $totalPemasukanQuery->sum('amount');
-            $totalPengeluaran = (float) $totalPengeluaranQuery->sum('amount');
+            $totalPemasukan   = (float) $pemasukanQuery->sum('amount');
+            $totalPengeluaran = (float) $pengeluaranQuery->sum('amount');
+
             $totalTransaksi = Transaction::whereYear('tanggal', $year)
-                ->when($month, fn($q) => $q->whereMonth('tanggal', $month))
+                ->when($month, fn ($q) => $q->whereMonth('tanggal', $month))
                 ->count();
+
             $saldoAkhir = $totalPemasukan - $totalPengeluaran;
 
             // =========================
-            // 🔹 Detail Persentase per Bulan (hanya bulan terpilih jika ada)
+            // 🔹 Detail Persentase
             // =========================
-            $detailPersentase = [];
-            $prevLaba = 0; // Track laba bulan sebelumnya
-            $startMonth = $month ? $month : 1;
-            $endMonth = $month ? $month : 12;
-            $labels = ['Jan', 'Feb', 'Mar', 'Apr', 'Mei', 'Jun', 'Jul', 'Agu', 'Sep', 'Okt', 'Nov', 'Des'];
+            $prevLaba   = 0;
+            $startMonth = $month ?: 1;
+            $endMonth   = $month ?: 12;
 
             for ($m = $startMonth; $m <= $endMonth; $m++) {
-                $bulanNama = $labels[$m - 1];
 
-                $income = (float) ($monthlyIncome[$m] ?? 0);
+                $income  = (float) ($monthlyIncome[$m] ?? 0);
                 $expense = (float) ($monthlyExpense[$m] ?? 0);
-
-                $laba = $income - $expense;
-                $total = $income + $expense;
-                $incomePercent = $total > 0 ? round(($income / $total) * 100, 1) : 0;
-                $expensePercent = $total > 0 ? round(($expense / $total) * 100, 1) : 0;
-                $labaPercent = $total > 0 ? round(($laba / $total) * 100, 1) : 0;
-
-                // Logika status: bandingkan laba bulan ini dengan bulan sebelumnya
-                $status = 'Stabil'; // Default
-                if ($m == $startMonth && !$month) {
-                    // Bulan pertama full tahun: tidak ada perbandingan
-                    $status = 'Awal Periode';
-                } elseif ($month) {
-                    // Hanya satu bulan: bandingkan dengan bulan sebelumnya (cross-year jika perlu)
-                    $prevMonth = $m - 1;
-                    $prevYear = $year;
-                    if ($prevMonth == 0) {
-                        $prevMonth = 12;
-                        $prevYear = $year - 1;
-                    }
-
-                    // Hitung prevLaba (query terpisah karena cross-year)
-                    $prevIncomeQuery = Transaction::where('type_id', $pemasukanId)
-                        ->whereYear('tanggal', $prevYear)
-                        ->whereMonth('tanggal', $prevMonth)
-                        ->sum('amount');
-                    $prevExpenseQuery = Transaction::where('type_id', $pengeluaranId)
-                        ->whereYear('tanggal', $prevYear)
-                        ->whereMonth('tanggal', $prevMonth)
-                        ->sum('amount');
-
-                    $prevLaba = (float) $prevIncomeQuery - (float) $prevExpenseQuery;
-
-                    if ($laba > $prevLaba) {
-                        $status = 'Naik';
-                    } elseif ($laba < $prevLaba) {
-                        $status = 'Turun';
-                    } else {
-                        $status = 'Stabil';
-                    }
-                } else {
-                    // Full tahun: bandingkan dengan prevLaba (sequential bulan sebelumnya)
-                    if ($laba > $prevLaba) {
-                        $status = 'Naik';
-                    } elseif ($laba < $prevLaba) {
-                        $status = 'Turun';
-                    } else {
-                        $status = 'Stabil';
-                    }
-                }
+                $laba    = $income - $expense;
+                $total   = $income + $expense;
 
                 $detailPersentase[] = [
-                    'bulan' => $bulanNama,
-                    'pemasukan' => $income,
-                    'pengeluaran' => $expense,
-                    'laba' => $laba,
-                    'pemasukan_persen' => $incomePercent,
-                    'pengeluaran_persen' => $expensePercent,
-                    'laba_persen' => $labaPercent,
-                    'status' => $status,
+                    'bulan'              => $labels[$m - 1],
+                    'pemasukan'          => $income,
+                    'pengeluaran'        => $expense,
+                    'laba'               => $laba,
+                    'pemasukan_persen'   => $total > 0 ? round(($income / $total) * 100, 1) : 0,
+                    'pengeluaran_persen' => $total > 0 ? round(($expense / $total) * 100, 1) : 0,
+                    'laba_persen'        => $total > 0 ? round(($laba / $total) * 100, 1) : 0,
+                    'status'             => $laba > $prevLaba ? 'Naik' : ($laba < $prevLaba ? 'Turun' : 'Stabil'),
                 ];
 
-                // Update prevLaba untuk iterasi berikutnya (penting untuk sequential full tahun)
                 $prevLaba = $laba;
             }
         }
 
+        // =========================
+        // 🔹 RETURN VIEW
+        // =========================
         return view('dashboard', compact(
             'totalPemasukan',
             'totalPengeluaran',
