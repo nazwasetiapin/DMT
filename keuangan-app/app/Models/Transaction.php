@@ -39,4 +39,11 @@ class Transaction extends Model
     {
         return $this->belongsTo(SubCategory::class);
     }
+
+    // Relasi ke TransactionHistory
+    public function histories()
+{
+    return $this->hasMany(TransactionHistory::class);
+}
+
 }

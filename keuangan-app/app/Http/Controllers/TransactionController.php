@@ -9,88 +9,90 @@ use App\Models\SubCategory;
 use App\Models\User;
 use App\Notifications\TransactionNotification;
 use Illuminate\Http\Request;
+use App\Models\TransactionHistory;
+
 
 class TransactionController extends Controller
 {
-   public function index()
-{
-    $query = Transaction::with(['type', 'category', 'subCategory'])->latest();
+    public function index()
+    {
+        $query = Transaction::with(['type', 'category', 'subCategory'])->latest();
 
-    // 🔹 Filter berdasarkan bulan
-    if (request()->filled('month')) {
-        $query->whereMonth('tanggal', request('month'));
+        // 🔹 Filter berdasarkan bulan
+        if (request()->filled('month')) {
+            $query->whereMonth('tanggal', request('month'));
+        }
+
+        // 🔹 Filter berdasarkan tahun
+        if (request()->filled('year')) {
+            $query->whereYear('tanggal', request('year'));
+        }
+
+        // 🔹 Filter berdasarkan tipe (Pemasukan / Pengeluaran)
+        if (request()->filled('type_id')) {
+            $query->where('type_id', request('type_id'));
+        }
+
+        // Ambil hasil filter (untuk perhitungan)
+        $filteredQuery = clone $query;
+
+        /**
+         * =============================
+         * Perhitungan Total
+         * =============================
+         */
+        $pemasukanId = Type::where('name', 'Pemasukan')->value('id');
+        $pengeluaranId = Type::where('name', 'Pengeluaran')->value('id');
+
+        $totalPemasukan = $pemasukanId
+            ? (clone $filteredQuery)->where('type_id', $pemasukanId)->sum('amount')
+            : 0;
+
+        $totalPengeluaran = $pengeluaranId
+            ? (clone $filteredQuery)->where('type_id', $pengeluaranId)->sum('amount')
+            : 0;
+
+        // Hitung saldo akhir
+        $saldo = $totalPemasukan - $totalPengeluaran;
+
+        /**
+         * =============================
+         * Untuk tampilan
+         * =============================
+         */
+        $years = Transaction::selectRaw('YEAR(tanggal) as year')
+            ->groupBy('year')
+            ->orderBy('year', 'desc')
+            ->pluck('year');
+
+        $monthlySums = Transaction::selectRaw('YEAR(tanggal) as year, MONTH(tanggal) as month, SUM(amount) as total')
+            ->groupBy('year', 'month')
+            ->orderBy('year', 'desc')
+            ->orderBy('month', 'desc')
+            ->get();
+
+        $role = auth()->user()->role;
+
+        // 🔹 Tambahkan ini — ambil data untuk dropdown filter
+        $types = Type::all();
+        $categories = Category::all();
+
+        // ✅ Pagination + simpan query filter
+        $transactions = $query->paginate(8)->appends(request()->all());
+
+        // 🔹 Kirim semua data ke view
+        return view('transactions.index', compact(
+            'transactions',
+            'totalPemasukan',
+            'totalPengeluaran',
+            'saldo',
+            'role',
+            'monthlySums',
+            'years',
+            'types',
+            'categories'
+        ));
     }
-
-    // 🔹 Filter berdasarkan tahun
-    if (request()->filled('year')) {
-        $query->whereYear('tanggal', request('year'));
-    }
-
-    // 🔹 Filter berdasarkan tipe (Pemasukan / Pengeluaran)
-    if (request()->filled('type_id')) {
-        $query->where('type_id', request('type_id'));
-    }
-
-    // Ambil hasil filter (untuk perhitungan)
-    $filteredQuery = clone $query;
-
-    /**
-     * =============================
-     * Perhitungan Total
-     * =============================
-     */
-    $pemasukanId = Type::where('name', 'Pemasukan')->value('id');
-    $pengeluaranId = Type::where('name', 'Pengeluaran')->value('id');
-
-    $totalPemasukan = $pemasukanId
-        ? (clone $filteredQuery)->where('type_id', $pemasukanId)->sum('amount')
-        : 0;
-
-    $totalPengeluaran = $pengeluaranId
-        ? (clone $filteredQuery)->where('type_id', $pengeluaranId)->sum('amount')
-        : 0;
-
-    // Hitung saldo akhir
-    $saldo = $totalPemasukan - $totalPengeluaran;
-
-    /**
-     * =============================
-     * Untuk tampilan
-     * =============================
-     */
-    $years = Transaction::selectRaw('YEAR(tanggal) as year')
-        ->groupBy('year')
-        ->orderBy('year', 'desc')
-        ->pluck('year');
-
-    $monthlySums = Transaction::selectRaw('YEAR(tanggal) as year, MONTH(tanggal) as month, SUM(amount) as total')
-        ->groupBy('year', 'month')
-        ->orderBy('year', 'desc')
-        ->orderBy('month', 'desc')
-        ->get();
-
-    $role = auth()->user()->role;
-
-    // 🔹 Tambahkan ini — ambil data untuk dropdown filter
-    $types = Type::all();
-    $categories = Category::all();
-
-     // ✅ Pagination + simpan query filter
-    $transactions = $query->paginate(8)->appends(request()->all());
-
-    // 🔹 Kirim semua data ke view
-    return view('transactions.index', compact(
-        'transactions',
-        'totalPemasukan',
-        'totalPengeluaran',
-        'saldo',
-        'role',
-        'monthlySums',
-        'years',
-        'types',
-        'categories'
-    ));
-}
 
 
     public function create()
@@ -113,6 +115,15 @@ class TransactionController extends Controller
 
         // Simpan transaksi baru
         $transaction = Transaction::create($request->all());
+
+        // Simpan riwayat transaksi
+        TransactionHistory::create([
+            'transaction_id' => $transaction->id,
+            'user_id' => auth()->id(),
+            'action' => 'create',
+            'new_data' => $transaction->toArray(),
+        ]);
+
 
         // 🔔 Kirim notifikasi ke CEO & Admin
         $users = User::whereIn('role', ['CEO', 'Admin'])->get();
@@ -152,13 +163,32 @@ class TransactionController extends Controller
             'deskripsi' => 'nullable|string',
         ]);
 
+        $oldData = $transaction->toArray();
+
         $transaction->update($request->all());
+
+        TransactionHistory::create([
+            'transaction_id' => $transaction->id,
+            'user_id' => auth()->id(),
+            'action' => 'update',
+            'old_data' => $oldData,
+            'new_data' => $transaction->toArray(),
+        ]);
+
         return redirect()->route('transactions.index')->with('success', 'Transaction updated successfully.');
     }
 
     public function destroy(Transaction $transaction)
     {
+        TransactionHistory::create([
+            'transaction_id' => $transaction->id,
+            'user_id' => auth()->id(),
+            'action' => 'delete',
+            'old_data' => $transaction->toArray(),
+        ]);
+
         $transaction->delete();
+
         return redirect()->route('transactions.index')->with('success', 'Transaction deleted successfully.');
     }
 

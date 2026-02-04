@@ -9,6 +9,7 @@ use App\Http\Controllers\SubCategoryController;
 use App\Http\Controllers\TransactionController;
 use App\Http\Controllers\ReportController;
 use App\Http\Controllers\ReportIndexController;
+use App\Http\Controllers\TransactionHistoryController;
 
 
 Route::get('/dashboard', [DashboardController::class, 'index'])
@@ -71,4 +72,11 @@ Route::get('/report/transactions', [ReportIndexController::class, 'generate'])
     ->name('report.index.generate');
 
 
-require __DIR__.'/auth.php';
+    // Transaction History - Hanya untuk Admin & CEO
+Route::get('/history-transaksi', [TransactionHistoryController::class, 'index'])
+    ->name('history.index')
+    ->middleware('auth');
+
+
+
+require __DIR__ . '/auth.php';
